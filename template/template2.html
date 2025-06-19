@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Driver Resume Editor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e9e9e9 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .app-container {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .resume-container {
+            width: 70%;
+            padding: 20px;
+            position: relative;
+            background-color: white;
+            overflow: hidden;
+        }
+        
+        .resume-paper {
+            width: 100%;
+            min-height: 1123px;
+            background-color: white;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .resume-header {
+            background: var(--header-color);
+            color: var(--header-text);
+            padding: 40px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            min-height: 200px;
+        }
+        
+        .profile-img-container {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid rgba(255, 255, 255, 0.4);
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 40px;
+            flex-shrink: 0;
+            cursor: pointer;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+        
+        .profile-img-placeholder {
+            color: var(--header-text);
+            text-align: center;
+            font-size: 14px;
+            padding: 20px;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+        
+        .profile-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        
+        .name-title {
+            flex-grow: 1;
+        }
+        
+        .resume-name {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .resume-title {
+            font-size: 24px;
+            font-weight: 400;
+            opacity: 0.95;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .contact-bar {
+            background: rgb(57, 56, 56);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            color: var(--header-text);
+            font-size: 14px;
+        }
+        
+        .contact-item i {
+            margin-right: 8px;
+            width: 16px;
+            text-align: center;
+        }
+        
+        .resume-body {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 35px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            color: var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--accent-color);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .profile-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #444;
+            text-align: justify;
+        }
+        
+        .experience-item {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        
+        .position-title {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+        
+        .company-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        
+        .dates {
+            color: #7f8c8d;
+            font-size: 14px;
+            font-weight: 500;
+            background: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            white-space: nowrap;
+        }
+        
+        .job-description {
+            margin-top: 15px;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .achievements-list {
+            margin-top: 15px;
+            padding-left: 0;
+            list-style: none;
+        }
+        
+        .achievements-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            color: #555;
+        }
+        
+        .achievements-list li:before {
+            content: "▶";
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            font-size: 12px;
+        }
+        
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .skill-tag {
+            background: var(--accent-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .skill-tag:hover {
+            transform: translateY(-2px);
+        }
+        
+        .certifications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .certification-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s;
+        }
+        
+        .certification-item:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cert-name {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+        
+        .cert-issuer {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .editable {
+            padding: 8px 10px;
+            border: 2px dashed transparent;
+            border-radius: 4px;
+            transition: all 0.3s;
+            min-height: 20px;
+            outline: none;
+        }
+        
+        .editable:focus {
+            border: 2px dashed var(--accent-color);
+            background-color: rgba(42, 143, 217, 0.05);
+            box-shadow: 0 0 0 3px rgba(42, 143, 217, 0.1);
+        }
+        
+        .instructions {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            color: #0d47a1;
+            font-size: 16px;
+            font-weight: 500;
+            border-top: 1px solid #90caf9;
+            margin-top: 20px;
+        }
+        
+        /* Enhanced sidebar */
+        .edit-sidebar {
+            width: 30%;
+            background: linear-gradient(135deg, #263238 0%, #37474f 100%);
+            padding: 30px;
+            color: white;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .sidebar-title {
+            text-align: center;
+            font-size: 26px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--accent-color);
+            font-weight: 700;
+        }
+        
+        .control-group {
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-group h3 {
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .control-group h3 i {
+            color: var(--accent-color);
+            font-size: 20px;
+        }
+        
+        .theme-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .theme-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .theme-btn:hover {
+            transform: scale(1.05);
+            border-color: white;
+        }
+        
+        .theme-btn.active {
+            transform: scale(1.05);
+            border-color: white;
+            box-shadow: 0 0 0 3px var(--accent-color);
+        }
+        
+        /* New color themes */
+        .theme1 {
+             background: #949398;
+             }
+        .theme2 { background:#FC766A; }
+        .theme3 { background:#5F4B8B; }
+        .theme4 { background: #00539C; }
+        
+        .action-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent-color));
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .action-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .action-btn i {
+            margin-right: 10px;
+        }
+        
+        .hidden-file-input {
+            display: none;
+        }
+        
+        .font-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .font-btn {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .font-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .font-btn.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .font-arial { font-family: Arial, sans-serif; }
+        .font-georgia { font-family: Georgia, serif; }
+        .font-roboto { font-family: 'Segoe UI', sans-serif; }
+        .font-times { font-family: 'Times New Roman', serif; }
+        
+        /* Enhanced animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .section {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .resume-container, .edit-sidebar {
+                width: 100%;
+            }
+            
+            .edit-sidebar {
+                order: -1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .resume-header {
+                flex-direction: column;
+                text-align: center;
+                padding: 30px 20px;
+            }
+            
+            .profile-img-container {
+                margin-right: 0;
+                margin-bottom: 25px;
+            }
+            
+            .contact-bar {
+                flex-direction: column;
+                gap: 10px;
+                padding: 15px 20px;
+            }
+            
+            .resume-body {
+                padding: 25px;
+            }
+            
+            .experience-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .dates {
+                margin-top: 5px;
+            }
+        }
+        
+        /* PDF Preview overlay */
+        #pdf-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        #pdf-content {
+            width: 80%;
+            max-width: 800px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        #close-preview {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Tooltip styles */
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 100;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="resume-container">
+            <div class="resume-paper" id="resume-content">
+                <div class="resume-header">
+                    <div class="profile-img-container" id="profile-img">
+                        <div class="profile-img-placeholder">Click to Upload Photo</div>
+                        <img id="profile-image" src="" alt="Profile">
+                    </div>
+                    <div class="name-title">
+                        <h1 class="resume-name editable" contenteditable="true">Daryl Banks</h1>
+                        <div class="resume-title editable" contenteditable="true">Professional Driver</div>
+                    </div>
+                </div>
+                
+                <div class="contact-bar">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span class="editable" contenteditable="true">banks.daryl@gmail.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span class="editable" contenteditable="true">4200 W Latham Street, Phoenix, AZ 85009, United States</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span class="editable" contenteditable="true">(602) 319-1212</span>
+                    </div>
+                </div>
+                
+                <div class="resume-body">
+                    <div class="section">
+                        <h2 class="section-title">Profile</h2>
+                        <div class="profile-text editable" contenteditable="true">
+                            Experienced and reliable Driver with vast experience working in the transportation of goods and passengers. 
+                            Adept in safe driving practices and traffic laws. Bringing forth a clean driving record as well as a career 
+                            history full of satisfied customers and clients. Experienced in performing maintenance and minor repairs on 
+                            vehicles. Committed to the safety and successful transportation of goods, passengers, and vehicles.
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2 class="section-title">Employment History</h2>
+                        
+                        <div class="experience-item">
+                            <div class="experience-header">
+                                <div>
+                                    <div class="position-title editable" contenteditable="true">Driver</div>
+                                    <div class="company-name editable" contenteditable="true">Albert's Trucking Company, Phoenix</div>
+                                </div>
+                                <div class="dates editable" contenteditable="true">April 2013 — August 2019</div>
+                            </div>
+                            <div class="job-description editable" contenteditable="true">
+                                Responsible for safe and timely transportation of goods across various routes while maintaining excellent customer service standards.
+                            </div>
+                            <ul class="achievements-list">
+                                <li class="editable" contenteditable="true">Performed vehicle inspections and maintenance prior to trips</li>
+                                <li class="editable" contenteditable="true">Read maps and identified the fastest routes</li>
+                                <li class="editable" contenteditable="true">Loaded and unloaded vehicles carefully</li>
+                                <li class="editable" contenteditable="true">Provided excellent customer service to clients resulting in repeat customers</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="experience-item">
+                            <div class="experience-header">
+                                <div>
+                                    <div class="position-title editable" contenteditable="true">Driver</div>
+                                    <div class="company-name editable" contenteditable="true">Bears Transportation, Phoenix</div>
+                                </div>
+                                <div class="dates editable" contenteditable="true">September 2009 — March 2013</div>
+                            </div>
+                            <div class="job-description editable" contenteditable="true">
+                                Operated commercial vehicles for local and regional deliveries, ensuring cargo safety and on-time delivery performance.
+                            </div>
+                            <ul class="achievements-list">
+                                <li class="editable" contenteditable="true">Maintained 100% safety record with zero accidents or violations</li>
+                                <li class="editable" contenteditable="true">Completed daily vehicle inspection reports and maintenance logs</li>
+                                <li class="editable" contenteditable="true">Collaborated with dispatch team to optimize delivery routes</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2 class="section-title">Skills & Expertise</h2>
+                        <div class="skills-container">
+                            <div class="skill-tag editable" contenteditable="true">Commercial Driving</div>
+                            <div class="skill-tag editable" contenteditable="true">Vehicle Maintenance</div>
+                            <div class="skill-tag editable" contenteditable="true">Route Planning</div>
+                            <div class="skill-tag editable" contenteditable="true">Safety Compliance</div>
+                            <div class="skill-tag editable" contenteditable="true">Customer Service</div>
+                            <div class="skill-tag editable" contenteditable="true">GPS Navigation</div>
+                            <div class="skill-tag editable" contenteditable="true">Cargo Handling</div>
+                            <div class="skill-tag editable" contenteditable="true">DOT Regulations</div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <h2 class="section-title">Certifications & Licenses</h2>
+                        <div class="certifications-grid">
+                            <div class="certification-item">
+                                <div class="cert-name editable" contenteditable="true">Commercial Driver's License (CDL)</div>
+                                <div class="cert-issuer editable" contenteditable="true">Arizona Department of Transportation</div>
+                            </div>
+                            <div class="certification-item">
+                                <div class="cert-name editable" contenteditable="true">Hazmat Endorsement</div>
+                                <div class="cert-issuer editable" contenteditable="true">Transportation Security Administration</div>
+                            </div>
+                            <div class="certification-item">
+                                <div class="cert-name editable" contenteditable="true">Defensive Driving Certificate</div>
+                                <div class="cert-issuer editable" contenteditable="true">National Safety Council</div>
+                            </div>
+                            <div class="certification-item">
+                                <div class="cert-name editable" contenteditable="true">First Aid/CPR Certified</div>
+                                <div class="cert-issuer editable" contenteditable="true">American Red Cross</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="instructions">
+                    <i class="fas fa-edit"></i> Click anywhere on the resume to edit content. 
+                    Customize colors, fonts, and export to PDF when ready.
+                </div>
+            </div>
+        </div>
+        
+        <div class="edit-sidebar">
+            <h2 class="sidebar-title"><i class="fas fa-cogs"></i> Customize Resume</h2>
+            
+            <div class="control-group">
+                <h3><i class="fas fa-palette"></i> Color Themes</h3>
+                <div class="theme-options">
+                    <div class="theme-btn theme1 active" data-theme="1"></div>
+                    <div class="theme-btn theme2" data-theme="2"></div>
+                    <div class="theme-btn theme3" data-theme="3"></div>
+                    <div class="theme-btn theme4" data-theme="4"></div>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <h3><i class="fas fa-font"></i> Font Styles</h3>
+                <div class="font-controls">
+                    <div class="font-btn font-roboto active" data-font="roboto">Modern</div>
+                    <div class="font-btn font-times" data-font="times">Classic</div>
+                    <div class="font-btn font-arial" data-font="arial">Sans</div>
+                    <div class="font-btn font-georgia" data-font="georgia">Serif</div>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <h3><i class="fas fa-user-circle"></i> Profile Photo</h3>
+                <button class="action-btn" id="upload-photo">
+                    <i class="fas fa-camera"></i> Upload Photo
+                </button>
+                <button class="action-btn" id="remove-photo">
+                    <i class="fas fa-trash-alt"></i> Remove Photo
+                </button>
+                <input type="file" id="photo-input" class="hidden-file-input" accept="image/*">
+            </div>
+            
+            <div class="control-group">
+                <h3><i class="fas fa-file-export"></i> Export Options</h3>
+                <button class="action-btn" id="download-pdf">
+                    <i class="fas fa-file-pdf"></i> Download PDF
+                </button>
+                <button class="action-btn" id="preview-pdf">
+                    <i class="fas fa-eye"></i> Preview Resume
+                </button>
+            </div>
+            
+            <div class="control-group">
+                <h3><i class="fas fa-tools"></i> Tools</h3>
+                <button class="action-btn" id="add-section">
+                    <i class="fas fa-plus"></i> Add Section
+                </button>
+                <button class="action-btn" id="optimize-content">
+                    <i class="fas fa-magic"></i> Optimize Content
+                </button>
+                <button class="action-btn" id="reset-resume">
+                    <i class="fas fa-undo"></i> Reset Resume
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- PDF Preview Overlay -->
+    <div id="pdf-overlay">
+        <button id="close-preview"><i class="fas fa-times"></i></button>
+        <div id="pdf-content"></div>
+    </div>
+
+    <script>
+        // Set default theme (Theme 1: #949398 and #F4DF4E)
+        document.documentElement.style.setProperty('--header-color', '#949398');
+        document.documentElement.style.setProperty('--accent-color', '#F4DF4E');
+        document.documentElement.style.setProperty('--accent-dark', '#d4c142');
+        document.documentElement.style.setProperty('--header-text', '#000000');
+        
+        // Theme selection with new colors
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const theme = this.getAttribute('data-theme');
+                
+                switch(theme) {
+                    case '1': // #949398 and #F4DF4E
+                        document.documentElement.style.setProperty('--header-color', '#949398');
+                        document.documentElement.style.setProperty('--accent-color', '#F4DF4E');
+                        document.documentElement.style.setProperty('--accent-dark', '#d4c142');
+                        document.documentElement.style.setProperty('--header-text', '#000000');
+                        break;
+                    case '2': // #FC766A and #5B84B1
+                        document.documentElement.style.setProperty('--header-color', '#FC766A');
+                        document.documentElement.style.setProperty('--accent-color', '#5B84B1');
+                        document.documentElement.style.setProperty('--accent-dark', '#4a6a8d');
+                        document.documentElement.style.setProperty('--header-text', '#FFFFFF');
+                        break;
+                    case '3': // #5F4B8B and #E69A8D
+                        document.documentElement.style.setProperty('--header-color', '#5F4B8B');
+                        document.documentElement.style.setProperty('--accent-color', '#E69A8D');
+                        document.documentElement.style.setProperty('--accent-dark', '#d2887a');
+                        document.documentElement.style.setProperty('--header-text', '#FFFFFF');
+                        break;
+                    case '4': // #00539C and #EEA47F
+                        document.documentElement.style.setProperty('--header-color', '#00539C');
+                        document.documentElement.style.setProperty('--accent-color', '#EEA47F');
+                        document.documentElement.style.setProperty('--accent-dark', '#d6906a');
+                        document.documentElement.style.setProperty('--header-text', '#FFFFFF');
+                        break;
+                }
+            });
+        });
+        
+        // Enhanced font selection
+        document.querySelectorAll('.font-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.font-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const font = this.getAttribute('data-font');
+                const fontFamily = 
+                    font === 'georgia' ? 'Georgia, serif' : 
+                    font === 'times' ? '"Times New Roman", serif' : 
+                    font === 'roboto' ? '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif' : 
+                    'Arial, sans-serif';
+                
+                document.querySelector('.resume-paper').style.fontFamily = fontFamily;
+            });
+        });
+        
+        // Photo upload with preview
+        document.getElementById('upload-photo').addEventListener('click', function() {
+            document.getElementById('photo-input').click();
+        });
+        
+        document.getElementById('photo-input').addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    const img = document.getElementById('profile-image');
+                    img.src = event.target.result;
+                    img.style.display = 'block';
+                    document.querySelector('.profile-img-placeholder').style.display = 'none';
+                }
+                
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+        
+        // Remove photo
+        document.getElementById('remove-photo').addEventListener('click', function() {
+            document.getElementById('profile-image').src = '';
+            document.getElementById('profile-image').style.display = 'none';
+            document.querySelector('.profile-img-placeholder').style.display = 'block';
+        });
+        
+        // PDF Download functionality
+        document.getElementById('download-pdf').addEventListener('click', function() {
+            const element = document.getElementById('resume-content');
+            
+            // Create a clone to measure accurate height
+            const clone = element.cloneNode(true);
+            clone.style.visibility = 'hidden';
+            clone.style.position = 'absolute';
+            clone.style.left = '-9999px';
+            clone.style.top = '0';
+            clone.style.width = '800px';
+            document.body.appendChild(clone);
+            
+            const contentHeight = clone.offsetHeight;
+            const maxHeight = 1122; // A4 height at 96dpi
+            const scaleFactor = maxHeight / contentHeight;
+            
+            document.body.removeChild(clone); // cleanup
+            
+            // Backup styles
+            const originalTransform = element.style.transform;
+            const originalTransformOrigin = element.style.transformOrigin;
+            const originalWidth = element.style.width;
+            const originalMarginTop = element.style.marginTop;
+            
+            // Apply scale to fit A4 height
+            element.style.transform = `scale(${scaleFactor})`;
+            element.style.transformOrigin = 'top left';
+            element.style.width = `${800 / scaleFactor}px`;
+            element.style.marginTop = '0'; // ensure it's at the very top
+            element.style.background = '#ffffff';
+            element.style.boxShadow = 'none';
+            
+            const opt = {
+                margin: 0,
+                filename: 'driver_resume.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: {
+                    scale: 3,
+                    useCORS: true,
+                    scrollY: 0 // prevents vertical shift
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait',
+                    hotfixes: ["px_scaling"]
+                }
+            };
+            
+            setTimeout(() => {
+                html2pdf().set(opt).from(element).save().then(() => {
+                    // Restore original styles
+                    element.style.transform = originalTransform;
+                    element.style.transformOrigin = originalTransformOrigin;
+                    element.style.width = originalWidth;
+                    element.style.marginTop = originalMarginTop;
+                });
+            }, 400);
+        });
+        
+        // PDF Preview functionality
+        document.getElementById('preview-pdf').addEventListener('click', function() {
+            const element = document.getElementById('resume-content');
+            const overlay = document.getElementById('pdf-overlay');
+            const pdfContent = document.getElementById('pdf-content');
+            
+            overlay.style.display = 'flex';
+            pdfContent.innerHTML = '<div style="text-align:center; margin-top:50px;"><i class="fas fa-spinner fa-spin fa-3x"></i><p>Generating preview...</p></div>';
+            
+            // Create a clone for preview
+            const elementClone = element.cloneNode(true);
+            
+            // Remove the instructions div
+            const instructions = elementClone.querySelector('.instructions');
+            if (instructions) {
+                instructions.remove();
+            }
+            
+            // Set styles for preview
+            elementClone.style.width = '100%';
+            elementClone.style.boxShadow = 'none';
+            elementClone.style.borderRadius = '0';
+            elementClone.style.padding = '0';
+            
+            // Clear previous content and add the clone
+            setTimeout(() => {
+                pdfContent.innerHTML = '';
+                pdfContent.appendChild(elementClone);
+                
+                // Add a note about the actual PDF
+                const note = document.createElement('div');
+                note.style.textAlign = 'center';
+                note.style.marginTop = '20px';
+                note.style.padding = '15px';
+                note.style.backgroundColor = '#f5f5f5';
+                note.style.borderRadius = '5px';
+                note.innerHTML = '<p><strong>Note:</strong> The actual PDF download will have higher quality and proper page formatting.</p>';
+                pdfContent.appendChild(note);
+            }, 1000);
+        });
+        
+        // Close PDF Preview
+        document.getElementById('close-preview').addEventListener('click', function() {
+            document.getElementById('pdf-overlay').style.display = 'none';
+        });
+        
+        // Add Section functionality
+        document.getElementById('add-section').addEventListener('click', function() {
+            const sectionTypes = [
+                { name: 'Education', template: `
+                    <div class="section">
+                        <h2 class="section-title editable" contenteditable="true">Education</h2>
+                        <div class="education-item">
+                            <div class="education-header">
+                                <div class="institution editable" contenteditable="true">University Name</div>
+                                <div class="dates editable" contenteditable="true">Year - Year</div>
+                            </div>
+                            <div class="degree editable" contenteditable="true">Degree or Certification</div>
+                            <div class="editable" contenteditable="true">Details about your education</div>
+                        </div>
+                    </div>
+                `},
+                { name: 'References', template: `
+                    <div class="section">
+                        <h2 class="section-title editable" contenteditable="true">References</h2>
+                        <div class="editable" contenteditable="true">
+                            <p><strong>Name:</strong> Reference Name<br>
+                            <strong>Position:</strong> Their Position<br>
+                            <strong>Company:</strong> Their Company<br>
+                            <strong>Phone:</strong> Their Contact Number<br>
+                            <strong>Email:</strong> Their Email Address</p>
+                        </div>
+                    </div>
+                `},
+                { name: 'Achievements', template: `
+                    <div class="section">
+                        <h2 class="section-title editable" contenteditable="true">Achievements</h2>
+                        <ul class="achievements-list">
+                            <li class="editable" contenteditable="true">Your first achievement</li>
+                            <li class="editable" contenteditable="true">Your second achievement</li>
+                            <li class="editable" contenteditable="true">Your third achievement</li>
+                        </ul>
+                    </div>
+                `},
+                { name: 'Languages', template: `
+                    <div class="section">
+                        <h2 class="section-title editable" contenteditable="true">Languages</h2>
+                        <div class="editable" contenteditable="true">
+                            <p><strong>English:</strong> Fluent<br>
+                            <strong>Spanish:</strong> Intermediate<br>
+                            <strong>Other:</strong> Basic</p>
+                        </div>
+                    </div>
+                `}
+            ];
+            
+            const sectionNames = sectionTypes.map(section => section.name);
+            const selectedSection = prompt(`Which section would you like to add?\n\nAvailable options: ${sectionNames.join(', ')}`);
+            
+            if (selectedSection) {
+                const selectedTemplate = sectionTypes.find(section => 
+                    section.name.toLowerCase() === selectedSection.toLowerCase());
+                
+                if (selectedTemplate) {
+                    const resumeBody = document.querySelector('.resume-body');
+                    const newSection = document.createElement('div');
+                    newSection.innerHTML = selectedTemplate.template;
+                    resumeBody.appendChild(newSection);
+                    
+                    // Scroll to the new section
+                    newSection.scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Make the new section editable
+                    newSection.querySelector('.editable').focus();
+                } else {
+                    alert('Invalid section name. Please choose from the available options.');
+                }
+            }
+        });
+        
+        // Optimize Content functionality
+        document.getElementById('optimize-content').addEventListener('click', function() {
+            if (confirm('This will analyze your resume content and suggest improvements. Continue?')) {
+                // Analyze job descriptions
+                const jobDescriptions = document.querySelectorAll('.job-description.editable');
+                jobDescriptions.forEach(desc => {
+                    if (desc.textContent.trim().length < 100) {
+                        desc.style.border = '2px solid #f39c12';
+                        desc.insertAdjacentHTML('afterend', 
+                            '<div style="color:#f39c12; font-size:14px; margin-top:5px;">' +
+                            'Tip: Add more specific details about your responsibilities and achievements.</div>');
+                    }
+                });
+                
+                // Analyze skills section
+                const skillsContainer = document.querySelector('.skills-container');
+                if (skillsContainer && skillsContainer.children.length < 5) {
+                    skillsContainer.style.border = '2px solid #f39c12';
+                    skillsContainer.insertAdjacentHTML('afterend', 
+                        '<div style="color:#f39c12; font-size:14px; margin-top:5px;">' +
+                        'Tip: Consider adding more relevant skills to showcase your expertise.</div>');
+                }
+                
+                // Check for measurable achievements
+                let hasMetrics = false;
+                const achievements = document.querySelectorAll('.achievements-list li');
+                achievements.forEach(ach => {
+                    if (/\d+%|\$\d+|over \d+|\d+ years/i.test(ach.textContent)) {
+                        hasMetrics = true;
+                    }
+                });
+                
+                if (!hasMetrics && achievements.length > 0) {
+                    achievements[0].parentNode.insertAdjacentHTML('beforebegin', 
+                        '<div style="color:#f39c12; font-size:14px; margin-bottom:10px;">' +
+                        'Tip: Add measurable achievements (e.g., "Improved delivery times by 15%").</div>');
+                }
+                
+                alert('Content optimization complete. Look for yellow highlighted tips on your resume.');
+            }
+        });
+        
+        // Reset Resume functionality
+        document.getElementById('reset-resume').addEventListener('click', function() {
+            if (confirm('Are you sure you want to reset the resume? All your changes will be lost.')) {
+                // Save the current theme and font
+                const currentTheme = document.querySelector('.theme-btn.active').getAttribute('data-theme');
+                const currentFont = document.querySelector('.font-btn.active').getAttribute('data-font');
+                
+                // Reload the page
+                location.reload();
+                
+                // After reload, reapply the theme and font (this will only work if using localStorage)
+                setTimeout(() => {
+                    document.querySelector(`.theme-btn[data-theme="${currentTheme}"]`).click();
+                    document.querySelector(`.font-btn[data-font="${currentFont}"]`).click();
+                }, 100);
+            }
+        });
+        
+        // Make all editable elements focusable and selectable
+        document.querySelectorAll('.editable').forEach(element => {
+            element.addEventListener('focus', function() {
+                this.style.backgroundColor = 'rgba(42, 143, 217, 0.05)';
+                this.style.border = '2px dashed var(--accent-color)';
+                this.style.boxShadow = '0 0 0 3px rgba(42, 143, 217, 0.1)';
+            });
+            
+            element.addEventListener('blur', function() {
+                this.style.backgroundColor = '';
+                this.style.border = '2px dashed transparent';
+                this.style.boxShadow = '';
+            });
+            
+            // Prevent line breaks when pressing Enter in certain elements
+            if(element.classList.contains('skill-tag') || element.classList.contains('cert-name') || 
+               element.classList.contains('company-name') || element.classList.contains('position-title')) {
+                element.addEventListener('keydown', function(e) {
+                    if(e.key === 'Enter') {
+                        e.preventDefault();
+                    }
+                });
+            }
+        });
+        
+        // Initialize tooltips for buttons
+        const tooltips = {
+            'upload-photo': 'Upload a professional profile photo',
+            'remove-photo': 'Remove your profile photo',
+            'download-pdf': 'Download your resume as PDF',
+            'preview-pdf': 'Preview how your PDF will look',
+            'add-section': 'Add a new section to your resume',
+            'optimize-content': 'Get suggestions to improve your content',
+            'reset-resume': 'Reset all changes to default'
+        };
+        
+        Object.keys(tooltips).forEach(id => {
+            const btn = document.getElementById(id);
+            if (btn) {
+                btn.addEventListener('mouseenter', function() {
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'tooltip';
+                    tooltip.textContent = tooltips[id];
+                    tooltip.style.position = 'absolute';
+                    tooltip.style.backgroundColor = 'rgba(0,0,0,0.8)';
+                    tooltip.style.color = 'white';
+                    tooltip.style.padding = '5px 10px';
+                    tooltip.style.borderRadius = '4px';
+                    tooltip.style.fontSize = '14px';
+                    tooltip.style.zIndex = '100';
+                    tooltip.style.bottom = '100%';
+                    tooltip.style.left = '50%';
+                    tooltip.style.transform = 'translateX(-50%)';
+                    tooltip.style.whiteSpace = 'nowrap';
+                    
+                    this.style.position = 'relative';
+                    this.appendChild(tooltip);
+                    
+                    setTimeout(() => {
+                        tooltip.style.opacity = '0';
+                        tooltip.style.transition = 'opacity 0.3s';
+                    }, 2000);
+                    
+                    this.addEventListener('mouseleave', function() {
+                        if (this.contains(tooltip)) {
+                            this.removeChild(tooltip);
+                        }
+                    }, { once: true });
+                });
+            }
+        });
+        
+        // Add animation to sections when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

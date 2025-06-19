@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Resume Editor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #eef2f7 0%, #d9e4f0 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .app-container {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+        
+        .resume-container {
+            width: 70%;
+            padding: 20px;
+            position: relative;
+            background-color: white;
+            overflow: hidden;
+        }
+        
+        .resume-paper {
+            width: 100%;
+            min-height: 1123px;
+            background-color: var(--bg-color);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            color: var(--text-color);
+        }
+        
+        .resume-header {
+            background: var(--header-bg);
+            color: var(--header-text);
+            padding: 40px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            min-height: 250px;
+        }
+        
+        .profile-img-container {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--border-color);
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 30px;
+            flex-shrink: 0;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .profile-img-placeholder {
+            color: #666;
+            text-align: center;
+            font-size: 12px;
+            padding: 10px;
+        }
+        
+        .profile-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        
+        .name-title {
+            flex-grow: 1;
+        }
+        
+        .resume-name {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .contact-header {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 15px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .resume-body {
+            display: flex;
+            padding: 0;
+        }
+        
+        .left-column {
+            width: 35%;
+            background-color: var(--sidebar-bg);
+            padding: 40px 30px;
+            border-right: 2px solid var(--border-color);
+        }
+        
+        .right-column {
+            width: 65%;
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 35px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            color: var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--accent-color);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .profile-section {
+            text-align: justify;
+            line-height: 1.6;
+            font-size: 15px;
+            color: var(--text-color);
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .skill-item {
+            background-color: var(--skill-bg);
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--skill-text);
+            text-align: center;
+            border: 1px solid var(--skill-border);
+        }
+        
+        .experience-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .experience-item:last-child {
+            border-bottom: none;
+        }
+        
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .company {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--accent-color);
+        }
+        
+        .dates {
+            color: #666;
+            font-size: 14px;
+            font-style: italic;
+        }
+        
+        .position {
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .description {
+            line-height: 1.6;
+            color: var(--text-color);
+            font-size: 15px;
+        }
+        
+        .education-item {
+            margin-bottom: 20px;
+        }
+        
+        .education-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .institution {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--accent-color);
+        }
+        
+        .degree {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+        
+        .editable {
+            padding: 8px 10px;
+            border: 1px dashed transparent;
+            border-radius: 4px;
+            transition: all 0.2s;
+            min-height: 20px;
+            outline: none;
+        }
+        
+        .editable:focus {
+            border: 1px dashed var(--accent-color);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .instructions {
+            text-align: center;
+            padding: 15px;
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            font-size: 16px;
+            border-top: 1px solid #bbdefb;
+            margin-top: 20px;
+        }
+        
+        /* Edit controls sidebar */
+        .edit-sidebar {
+            width: 30%;
+            background: linear-gradient(135deg, #2c3e50 0%, #1a2a3a 100%);
+            padding: 25px;
+            color: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-title {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .control-group {
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 18px;
+            border-radius: 10px;
+        }
+        
+        .control-group h3 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .control-group h3 i {
+            color: #3498db;
+        }
+        
+        .theme-options {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .theme-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .theme-btn:hover {
+            transform: scale(1.1);
+            border-color: white;
+        }
+        
+        .theme-btn.active {
+            transform: scale(1.1);
+            border-color: white;
+            box-shadow: 0 0 0 3px #3498db;
+        }
+        
+        .theme-dark { background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); }
+        .theme-blue { background: linear-gradient(135deg, #d7bf96 0%, #eef4bf 100%); }
+        .theme-green { background: linear-gradient(135deg, #4e1717 0%, #9c2525 100%); }
+        .theme-purple { background: linear-gradient(135deg, #09350c 0%, #27661c 100%); }
+        
+        .action-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 8px;
+            background: #3498db;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .action-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .action-btn i {
+            margin-right: 8px;
+        }
+        
+        .hidden-file-input {
+            display: none;
+        }
+        
+        .font-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .font-btn {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .font-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .font-btn.active {
+            background: #3498db;
+            border-color: #3498db;
+        }
+        
+        .font-arial { font-family: Arial, sans-serif; }
+        .font-georgia { font-family: Georgia, serif; }
+        .font-tahoma { font-family: Tahoma, sans-serif; }
+        
+        /* Theme color variables */
+        :root {
+            --bg-color: #1a2332;
+            --header-bg: #1a2332;
+            --header-text: #ffffff;
+            --sidebar-bg: #1a2332;
+            --text-color: #ffffff;
+            --accent-color: #ffffff;
+            --border-color: #ffffff;
+            --skill-bg: rgba(255, 255, 255, 0.1);
+            --skill-text: #ffffff;
+            --skill-border: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* PDF overlay */
+        .pdf-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .pdf-preview {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        @media (max-width: 1200px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .resume-container, .edit-sidebar {
+                width: 100%;
+            }
+            
+            .edit-sidebar {
+                order: -1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .resume-body {
+                flex-direction: column;
+            }
+            
+            .left-column, .right-column {
+                width: 100%;
+            }
+            
+            .left-column {
+                border-right: none;
+                border-bottom: 2px solid var(--border-color);
+            }
+            
+            .resume-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-img-container {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="resume-container">
+            <div class="resume-paper" id="resume-content">
+                <div class="resume-header">
+    <div class="name-title">
+        <h1 class="resume-name editable" contenteditable="true">JEFF MARTABANO</h1>
+        <div class="contact-header">
+            <div class="contact-item">
+                <span class="editable" contenteditable="true">Driver</span>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span class="editable" contenteditable="true">4200 W Latham Street, Phoenix, AZ 85009, United States</span>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span class="editable" contenteditable="true">martabano.jeff@gmail.com</span>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <span class="editable" contenteditable="true">(602) 319-1212</span>
+            </div>
+        </div>
+    </div>
+    <div class="profile-img-container" id="profile-img">
+        <div class="profile-img-placeholder">Click to Upload Photo</div>
+        <img id="profile-image" src="" alt="Profile">
+    </div>
+</div>
+                
+                <div class="resume-body">
+                    <div class="left-column">
+                        <div class="section">
+                            <h2 class="section-title">PROFILE</h2>
+                            <div class="profile-section editable" contenteditable="true">
+                                Experienced and reliable Driver with vast experience working in transportation and logistics. Proven track record of safe driving, timely deliveries, and excellent customer service. Committed to maintaining vehicle safety standards and following all traffic regulations.
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2 class="section-title">SKILLS</h2>
+                            <div class="skills-grid">
+                                <div class="skill-item editable" contenteditable="true">Safe Driving</div>
+                                <div class="skill-item editable" contenteditable="true">Route Planning</div>
+                                <div class="skill-item editable" contenteditable="true">Vehicle Maintenance</div>
+                                <div class="skill-item editable" contenteditable="true">Time Management</div>
+                                <div class="skill-item editable" contenteditable="true">Customer Service</div>
+                                <div class="skill-item editable" contenteditable="true">GPS Navigation</div>
+                                <div class="skill-item editable" contenteditable="true">DOT Compliance</div>
+                                <div class="skill-item editable" contenteditable="true">Cargo Handling</div>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2 class="section-title">CERTIFICATIONS</h2>
+                            <div class="education-item">
+                                <div class="degree editable" contenteditable="true">Commercial Driver's License (CDL Class A)</div>
+                                <div class="dates editable" contenteditable="true">Valid through 2026</div>
+                            </div>
+                            <div class="education-item">
+                                <div class="degree editable" contenteditable="true">Defensive Driving Certificate</div>
+                                <div class="dates editable" contenteditable="true">2023</div>
+                            </div>
+                            <div class="education-item">
+                                <div class="degree editable" contenteditable="true">Hazmat Endorsement</div>
+                                <div class="dates editable" contenteditable="true">2022</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="right-column">
+                        <div class="section">
+                            <h2 class="section-title">EXPERIENCE</h2>
+                            <div class="experience-item">
+                                <div class="experience-header">
+                                    <div class="company editable" contenteditable="true">Swift Transportation</div>
+                                    <div class="dates editable" contenteditable="true">Jan 2020 - Present</div>
+                                </div>
+                                <div class="position editable" contenteditable="true">Long-Haul Truck Driver</div>
+                                <div class="description editable" contenteditable="true">
+                                    Operated 18-wheeler trucks across multiple states, maintaining 100% on-time delivery record. Conducted pre-trip and post-trip vehicle inspections, managed electronic logbooks, and ensured DOT compliance. Transported various cargo types including hazardous materials with zero safety incidents.
+                                </div>
+                            </div>
+                            
+                            <div class="experience-item">
+                                <div class="experience-header">
+                                    <div class="company editable" contenteditable="true">UPS</div>
+                                    <div class="dates editable" contenteditable="true">Mar 2018 - Dec 2019</div>
+                                </div>
+                                <div class="position editable" contenteditable="true">Delivery Driver</div>
+                                <div class="description editable" contenteditable="true">
+                                    Delivered packages to residential and commercial customers throughout Phoenix metro area. Managed daily delivery routes of 100+ stops, maintained customer relationships, and handled package documentation. Achieved 98% customer satisfaction rating.
+                                </div>
+                            </div>
+                            
+                            <div class="experience-item">
+                                <div class="experience-header">
+                                    <div class="company editable" contenteditable="true">ABC Logistics</div>
+                                    <div class="dates editable" contenteditable="true">Jun 2015 - Feb 2018</div>
+                                </div>
+                                <div class="position editable" contenteditable="true">Local Delivery Driver</div>
+                                <div class="description editable" contenteditable="true">
+                                    Operated delivery vehicles for local routes, managed inventory tracking, and provided excellent customer service. Responsible for vehicle maintenance scheduling and fuel efficiency optimization. Trained 5 new drivers on company policies and safety procedures.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2 class="section-title">EDUCATION</h2>
+                            <div class="education-item">
+                                <div class="education-header">
+                                    <div class="institution editable" contenteditable="true">Phoenix Community College</div>
+                                    <div class="dates editable" contenteditable="true">2014</div>
+                                </div>
+                                <div class="degree editable" contenteditable="true">Commercial Driving Certificate</div>
+                            </div>
+                            
+                            <div class="education-item">
+                                <div class="education-header">
+                                    <div class="institution editable" contenteditable="true">Desert View High School</div>
+                                    <div class="dates editable" contenteditable="true">2012</div>
+                                </div>
+                                <div class="degree editable" contenteditable="true">High School Diploma</div>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2 class="section-title">ACHIEVEMENTS</h2>
+                            <div class="description editable" contenteditable="true">
+                                • Driver of the Month award at Swift Transportation (3 times)<br>
+                                • 5+ years accident-free driving record<br>
+                                • Over 250,000 miles driven without incidents<br>
+                                • Perfect attendance record for 2 consecutive years
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            
+            </div>
+        </div>
+        
+        <div class="edit-sidebar">
+            <h2 class="sidebar-title"><i class="fas fa-sliders-h"></i> Resume Customization</h2>
+            
+            <div class="control-group">
+                <h3><i class="fas fa-palette"></i> Color Theme</h3>
+                <div class="theme-options">
+                    <div class="theme-btn theme-dark active" data-theme="dark"></div>
+                    <div class="theme-btn theme-blue" data-theme="beige"></div>
+                    <div class="theme-btn theme-green" data-theme="red"></div>
+                    <div class="theme-btn theme-purple" data-theme="green"></div>
+                </div>
+            </div>
+            
+    
+            
+            <div class="control-group">
+                <h3><i class="fas fa-camera"></i> Profile Photo</h3>
+                <button class="action-btn" id="upload-photo">
+                    <i class="fas fa-upload"></i> Upload Photo
+                </button>
+                <button class="action-btn" id="remove-photo">
+                    <i class="fas fa-trash"></i> Remove Photo
+                </button>
+                <input type="file" id="photo-input" class="hidden-file-input" accept="image/*">
+            </div>
+            
+            <div class="control-group">
+                <h3><i class="fas fa-file-pdf"></i> Export Resume</h3>
+                <button class="action-btn" id="download-pdf">
+                    <i class="fas fa-download"></i> Download PDF
+                </button>
+                <button class="action-btn" id="preview-pdf">
+                    <i class="fas fa-eye"></i> Preview PDF
+                </button>
+            </div>
+            
+            <div class="control-group">
+                <h3><i class="fas fa-magic"></i> Enhance Resume</h3>
+                <button class="action-btn" id="suggest-improvements">
+                    <i class="fas fa-lightbulb"></i> Suggest Improvements
+                </button>
+                <button class="action-btn" id="reset-resume">
+                    <i class="fas fa-redo"></i> Reset to Default
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="pdf-overlay" id="pdf-overlay">
+        <div class="pdf-preview" id="pdf-preview">
+            <h2 style="text-align: center; margin-bottom: 20px;">PDF Preview</h2>
+            <p>Your PDF will be generated in the actual download. This is just a preview.</p>
+            <div id="pdf-content" style="margin-top: 20px;"></div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="action-btn" id="close-preview" style="width: auto; padding: 10px 30px;">
+                    <i class="fas fa-times"></i> Close Preview
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme selection
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Set theme based on data attribute
+                const theme = this.getAttribute('data-theme');
+                const root = document.documentElement;
+                
+                switch(theme) {
+                    case 'beige': 
+    root.style.setProperty('--bg-color', '#f5f5dc');
+    root.style.setProperty('--header-bg', 'linear-gradient(135deg, #d2b48c 0%, #bc8f8f 100%)'); // Tan to Rosy Brown
+    root.style.setProperty('--header-text', '#3e2723');
+    root.style.setProperty('--sidebar-bg', '#faf0e6'); 
+    root.style.setProperty('--text-color', '#4e342e'); 
+    root.style.setProperty('--accent-color', '#8d6e63'); 
+    root.style.setProperty('--border-color', '#a1887f'); 
+    root.style.setProperty('--skill-bg', '#efebe9'); 
+    root.style.setProperty('--skill-text', '#5d4037'); 
+    root.style.setProperty('--skill-border', '#d7ccc8'); 
+    break;
+case 'red': 
+    root.style.setProperty('--bg-color', '#ffffff');
+    root.style.setProperty('--header-bg', 'linear-gradient(135deg, #0a0908 0%, #49111c 100%)'); // Black to Dark Maroon
+    root.style.setProperty('--header-text', '#ffffff');
+    root.style.setProperty('--sidebar-bg', '#f8f0f2'); 
+    root.style.setProperty('--text-color', '#0a0908'); 
+    root.style.setProperty('--accent-color', '#49111c'); 
+    root.style.setProperty('--border-color', '#49111c');
+    root.style.setProperty('--skill-bg', '#f9f0f2'); 
+    root.style.setProperty('--skill-text', '#49111c'); 
+    root.style.setProperty('--skill-border', '#e8c6d0'); 
+    break;
+case 'green':
+    root.style.setProperty('--bg-color', '#ffffff');
+    root.style.setProperty('--header-bg', 'linear-gradient(135deg, #000000 0%, #013220 100%)'); // Black to Dark Green
+    root.style.setProperty('--header-text', '#ffffff');
+    root.style.setProperty('--sidebar-bg', '#f0f8f0');
+    root.style.setProperty('--text-color', '#021c13'); 
+    root.style.setProperty('--accent-color', '#013220');
+    root.style.setProperty('--border-color', '#013220');
+    root.style.setProperty('--skill-bg', '#e6f7e6'); 
+    root.style.setProperty('--skill-text', '#013220'); 
+    root.style.setProperty('--skill-border', '#a3d9a5'); 
+    break;
+                    default: // dark
+                        root.style.setProperty('--bg-color', '#1a2332');
+                        root.style.setProperty('--header-bg', '#1a2332');
+                        root.style.setProperty('--header-text', '#ffffff');
+                        root.style.setProperty('--sidebar-bg', '#1a2332');
+                        root.style.setProperty('--text-color', '#ffffff');
+                        root.style.setProperty('--accent-color', '#ffffff');
+                        root.style.setProperty('--border-color', '#ffffff');
+                        root.style.setProperty('--skill-bg', 'rgba(255, 255, 255, 0.1)');
+                        root.style.setProperty('--skill-text', '#ffffff');
+                        root.style.setProperty('--skill-border', 'rgba(255, 255, 255, 0.2)');
+                }
+            });
+        });
+        
+        // Font selection
+        document.querySelectorAll('.font-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.font-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Set font family for the resume
+                const font = this.getAttribute('data-font');
+                document.querySelector('.resume-paper').style.fontFamily = 
+                    font === 'georgia' ? 'Georgia, serif' : 
+                    font === 'tahoma' ? 'Tahoma, sans-serif' : 'Arial, sans-serif';
+            });
+        });
+
+        // Profile photo upload
+        const profileImgContainer = document.getElementById('profile-img');
+        const profileImg = document.getElementById('profile-image');
+        const profileImgPlaceholder = document.querySelector('.profile-img-placeholder');
+        const photoInput = document.getElementById('photo-input');
+
+        // Upload photo button
+        document.getElementById('upload-photo').addEventListener('click', () => {
+            photoInput.click();
+        });
+
+        // Remove photo button
+        document.getElementById('remove-photo').addEventListener('click', () => {
+            profileImg.src = '';
+            profileImg.style.display = 'none';
+            profileImgPlaceholder.style.display = 'flex';
+        });
+
+        // Handle file selection
+        photoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    profileImg.src = event.target.result;
+                    profileImg.style.display = 'block';
+                    profileImgPlaceholder.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Click on profile image container to upload
+        profileImgContainer.addEventListener('click', () => {
+            photoInput.click();
+        });
+
+        // PDF Download
+              document.getElementById('download-pdf').addEventListener('click', function () {
+    const element = document.getElementById('resume-content');
+
+    // Clone to measure accurate height
+    const clone = element.cloneNode(true);
+    clone.style.visibility = 'hidden';
+    clone.style.position = 'absolute';
+    clone.style.left = '-9999px';
+    clone.style.top = '0';
+    clone.style.width = '800px';
+    document.body.appendChild(clone);
+
+    const contentHeight = clone.offsetHeight;
+    const maxHeight = 1122; // A4 height at 96dpi
+    const scaleFactor = maxHeight / contentHeight;
+
+    document.body.removeChild(clone); // cleanup
+
+    // Backup styles
+    const originalTransform = element.style.transform;
+    const originalTransformOrigin = element.style.transformOrigin;
+    const originalWidth = element.style.width;
+    const originalMarginTop = element.style.marginTop;
+
+    // Apply scale to fit A4 height
+    element.style.transform = `scale(${scaleFactor})`;
+    element.style.transformOrigin = 'top left';
+    element.style.width = `${800 / scaleFactor}px`;
+    element.style.marginTop = '0'; // ensure it's at the very top
+    element.style.background = '#ffffff';
+    element.style.boxShadow = 'none';
+
+    const opt = {
+        margin: 0,
+        filename: 'nursing_resume.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: {
+            scale: 3,
+            useCORS: true,
+            scrollY: 0 // prevents vertical shift
+        },
+        jsPDF: {
+            unit: 'mm',
+            format: 'a4',
+            orientation: 'portrait',
+            hotfixes: ["px_scaling"]
+        }
+    };
+
+    setTimeout(() => {
+        html2pdf().set(opt).from(element).save().then(() => {
+            // Restore original styles
+            element.style.transform = originalTransform;
+            element.style.transformOrigin = originalTransformOrigin;
+            element.style.width = originalWidth;
+            element.style.marginTop = originalMarginTop;
+        });
+    }, 400);
+});
+
+        // PDF Preview
+        document.getElementById('preview-pdf').addEventListener('click', () => {
+            const element = document.getElementById('resume-content');
+            const pdfOverlay = document.getElementById('pdf-overlay');
+            const pdfContent = document.getElementById('pdf-content');
+            
+            // Show overlay
+            pdfOverlay.style.display = 'flex';
+            
+            // Clone the resume content for preview
+            const clone = element.cloneNode(true);
+            clone.style.width = '210mm';
+            clone.style.margin = '0 auto';
+            clone.style.padding = '20px';
+            clone.style.backgroundColor = 'white';
+            clone.style.boxShadow = 'none';
+            
+            // Clear previous content and add new
+            pdfContent.innerHTML = '';
+            pdfContent.appendChild(clone);
+        });
+
+        // Close PDF Preview
+        document.getElementById('close-preview').addEventListener('click', () => {
+            document.getElementById('pdf-overlay').style.display = 'none';
+        });
+
+        // Suggest Improvements
+        document.getElementById('suggest-improvements').addEventListener('click', () => {
+            alert("Here are some suggestions to improve your resume:\n\n" +
+                  "1. Quantify your achievements (e.g., 'Increased delivery efficiency by 20%')\n" +
+                  "2. Add more specific skills relevant to your target job\n" +
+                  "3. Include any special training or certifications\n" +
+                  "4. Consider adding a professional summary at the top\n" +
+                  "5. Make sure all dates are consistent in format");
+        });
+
+        // Reset Resume
+        document.getElementById('reset-resume').addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset the resume to default? All your changes will be lost.')) {
+                // Reset all editable fields to their original content
+                const originalContent = {
+                    'resume-name': 'JEFF MARTABANO',
+                    'contact-item span:first-of-type': 'Driver',
+                    'contact-item span:nth-of-type(2)': '4200 W Latham Street, Phoenix, AZ 85009, United States',
+                    'contact-item span:nth-of-type(3)': 'martabano.jeff@gmail.com',
+                    'contact-item span:nth-of-type(4)': '(602) 319-1212',
+                    'profile-section': 'Experienced and reliable Driver with vast experience working in transportation and logistics. Proven track record of safe driving, timely deliveries, and excellent customer service. Committed to maintaining vehicle safety standards and following all traffic regulations.',
+                    'skill-item:nth-of-type(1)': 'Safe Driving',
+                    'skill-item:nth-of-type(2)': 'Route Planning',
+                    'skill-item:nth-of-type(3)': 'Vehicle Maintenance',
+                    'skill-item:nth-of-type(4)': 'Time Management',
+                    'skill-item:nth-of-type(5)': 'Customer Service',
+                    'skill-item:nth-of-type(6)': 'GPS Navigation',
+                    'skill-item:nth-of-type(7)': 'DOT Compliance',
+                    'skill-item:nth-of-type(8)': 'Cargo Handling',
+                    'degree:nth-of-type(1)': 'Commercial Driver\'s License (CDL Class A)',
+                    'dates:nth-of-type(1)': 'Valid through 2026',
+                    'degree:nth-of-type(2)': 'Defensive Driving Certificate',
+                    'dates:nth-of-type(2)': '2023',
+                    'degree:nth-of-type(3)': 'Hazmat Endorsement',
+                    'dates:nth-of-type(3)': '2022',
+                    'company:nth-of-type(1)': 'Swift Transportation',
+                    'dates:nth-of-type(4)': 'Jan 2020 - Present',
+                    'position:nth-of-type(1)': 'Long-Haul Truck Driver',
+                    'description:nth-of-type(1)': 'Operated 18-wheeler trucks across multiple states, maintaining 100% on-time delivery record. Conducted pre-trip and post-trip vehicle inspections, managed electronic logbooks, and ensured DOT compliance. Transported various cargo types including hazardous materials with zero safety incidents.',
+                    'company:nth-of-type(2)': 'UPS',
+                    'dates:nth-of-type(5)': 'Mar 2018 - Dec 2019',
+                    'position:nth-of-type(2)': 'Delivery Driver',
+                    'description:nth-of-type(2)': 'Delivered packages to residential and commercial customers throughout Phoenix metro area. Managed daily delivery routes of 100+ stops, maintained customer relationships, and handled package documentation. Achieved 98% customer satisfaction rating.',
+                    'company:nth-of-type(3)': 'ABC Logistics',
+                    'dates:nth-of-type(6)': 'Jun 2015 - Feb 2018',
+                    'position:nth-of-type(3)': 'Local Delivery Driver',
+                    'description:nth-of-type(3)': 'Operated delivery vehicles for local routes, managed inventory tracking, and provided excellent customer service. Responsible for vehicle maintenance scheduling and fuel efficiency optimization. Trained 5 new drivers on company policies and safety procedures.',
+                    'institution:nth-of-type(1)': 'Phoenix Community College',
+                    'dates:nth-of-type(7)': '2014',
+                    'degree:nth-of-type(4)': 'Commercial Driving Certificate',
+                    'institution:nth-of-type(2)': 'Desert View High School',
+                    'dates:nth-of-type(8)': '2012',
+                    'degree:nth-of-type(5)': 'High School Diploma',
+            'description:nth-of-type(4)': '• Driver of the Month award at Swift Transportation (3 times)<br>• 5+ years accident-free driving record<br>• Over 250,000 miles driven without incidents<br>• Perfect attendance record for 2 consecutive years'
+        };
+
+        // Set all editable fields back to original content
+        for (const [selector, text] of Object.entries(originalContent)) {
+            let element;
+            if (selector.startsWith('skill-item') || selector.startsWith('degree') || selector.startsWith('dates') || selector.startsWith('company') || selector.startsWith('position') || selector.startsWith('description') || selector.startsWith('institution')) {
+                element = document.querySelector(`.${selector}`);
+            } else if (selector.includes(':nth-of-type')) {
+                element = document.querySelector(`.${selector.replace(':nth-of-type', ':nth-of-type')}`);
+            } else {
+                element = document.querySelector(`.${selector}`);
+            }
+            if (element) {
+                if (selector === 'description:nth-of-type(4)') {
+                    element.innerHTML = text; // For the achievements with HTML breaks
+                } else {
+                    element.textContent = text;
+                }
+            }
+        }
+
+        // Reset theme to dark
+        document.querySelector('.theme-dark').click();
+        
+        // Reset font to Arial
+        document.querySelector('.font-arial').click();
+        // Remove profile photo if exists
+        document.getElementById('remove-photo').click();
+    }
+});
+
+// Make all elements with contenteditable actually editable
+document.querySelectorAll('[contenteditable]').forEach(element => {
+    element.addEventListener('focus', function() {
+        this.style.border = '1px dashed var(--accent-color)';
+        this.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+    });
+    
+    element.addEventListener('blur', function() {
+        this.style.border = '1px dashed transparent';
+        this.style.backgroundColor = 'transparent';
+    });
+});
+
+// Auto-resize the name field to fit content
+const nameField = document.querySelector('.resume-name');
+nameField.addEventListener('input', function() {
+    const length = this.textContent.length;
+    if (length > 20) {
+        this.style.fontSize = Math.max(24, 48 - (length - 20) * 1.5) + 'px';
+    } else {
+        this.style.fontSize = '48px';
+    }
+});
+
+// Handle Enter key in editable fields to prevent new lines (except for multi-line fields)
+document.querySelectorAll('.editable').forEach(editable => {
+    editable.addEventListener('keydown', function(e) {
+        // Allow Enter key only in description and profile sections
+        const isMultiLine = this.classList.contains('profile-section') || 
+                          this.classList.contains('description');
+        
+        if (e.key === 'Enter' && !isMultiLine) {
+            e.preventDefault();
+            this.blur();
+        }
+    });
+});
+
+// Save resume data to localStorage when editing
+document.querySelectorAll('.editable').forEach(editable => {
+    editable.addEventListener('blur', function() {
+        localStorage.setItem('resumeData', document.getElementById('resume-content').innerHTML);
+    });
+});
+
+// Load resume data from localStorage if available
+window.addEventListener('load', function() {
+    const savedData = localStorage.getItem('resumeData');
+    if (savedData) {
+        if (confirm('Would you like to load your previously saved resume?')) {
+            document.getElementById('resume-content').innerHTML = savedData;
+            // Reattach event listeners to the newly loaded elements
+            document.querySelectorAll('.editable').forEach(element => {
+                element.addEventListener('focus', function() {
+                    this.style.border = '1px dashed var(--accent-color)';
+                    this.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                });
+                
+                element.addEventListener('blur', function() {
+                    this.style.border = '1px dashed transparent';
+                    this.style.backgroundColor = 'transparent';
+                });
+            });
+        }
+    }
+});
+
+// Print button functionality (additional)
+document.addEventListener('keydown', function(e) {
+    // Ctrl+P or Cmd+P for print
+    if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+        e.preventDefault();
+        document.getElementById('download-pdf').click();
+    }
+});
+
+// Help tooltips
+document.querySelectorAll('.action-btn').forEach(btn => {
+    btn.addEventListener('mouseover', function() {
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.textContent = this.getAttribute('data-tooltip') || '';
+        tooltip.style.position = 'absolute';
+        tooltip.style.backgroundColor = 'rgba(0,0,0,0.8)';
+        tooltip.style.color = 'white';
+        tooltip.style.padding = '5px 10px';
+        tooltip.style.borderRadius = '4px';
+        tooltip.style.fontSize = '12px';
+        tooltip.style.zIndex = '100';
+        tooltip.style.bottom = '100%';
+        tooltip.style.left = '50%';
+        tooltip.style.transform = 'translateX(-50%)';
+        tooltip.style.whiteSpace = 'nowrap';
+        
+        if (tooltip.textContent) {
+            this.appendChild(tooltip);
+        }
+    });
+    
+    btn.addEventListener('mouseout', function() {
+        const tooltip = this.querySelector('.tooltip');
+        if (tooltip) {
+            tooltip.remove();
+        }
+    });
+});
+
+// Auto-save every 30 seconds
+setInterval(() => {
+    if (document.querySelector('.editable:focus')) {
+        localStorage.setItem('resumeData', document.getElementById('resume-content').innerHTML);
+    }
+}, 30000);
+
+// Initialize with dark theme
+document.querySelector('.theme-dark').click();
+</script>
+</body>
+</html>

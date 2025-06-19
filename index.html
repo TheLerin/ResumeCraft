@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeCraft | Professional Resume Generator</title>
+    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+   
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#home" class="logo">Resume<span>Craft</span></a>  
+           <nav>   
+ <ul id="navMenu">
+        <li class="center-item"><a href="#about">About Us</a></li>
+        <li class="center-item"><a href="#templates">Templates</a></li>
+        <li class="center-item"><a href="#how-it-works">How It Works</a></li>
+     <!--   <li><a href="#" class="btn btn-outline" id="createResumeBtn">Create Now</a></li>--> 
+        <li><a href="Login/login.html" target="_blank" class="btn btn-outline" id="loginbutton">Login</a></li>
+    </ul>
+</nav>
+ 
+
+                  
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id ="home">
+        <video class="video-bg" autoplay muted loop>
+        <source src="https://videos.pexels.com/video-files/5971450/5971450-sd_960_506_25fps.mp4" type="video/mp4">
+          <!---  <source src="https://videocdn.cdnpk.net/videos/55174642-aa36-424c-a467-4ce082ed8aa1/horizontal/previews/clear/large.mp4?token=exp=1748981970~hmac=2a5ff92fc33e4e8706b6bf77690d2daace623f6ad892ebc51c55c2253ad77fd3" type="video/mp4"> -->
+
+        </video>
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>Create a Professional Resume in Minutes</h1>
+                <p>Stand out from the crowd with our professionally designed resume templates. Easy to customize, download, and share.</p>
+                <a href="#templates" class="btn">Browse Templates</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Templates  -->
+    <section class="section" id="templates">
+        <div class="container">
+            <h2 class="section-title">Professional Templates</h2>
+            <div class="templates-grid">
+
+                <!-- Temp 1 -->
+                <div class="template-card"><img src="Resource/temp1.png" alt="Modern Executive Template Preview" class="template-img">
+                    <div class="template-overlay">
+                         <a class="btn" href="template/template1.html" target="_blank">Preview Template</a>
+                    </div>
+                    <div class="template-info">
+                        <h3>Modern Executive</h3>
+                        <p>Clean and professional design</p>
+                    </div>
+                </div>
+
+                
+                <!-- Temp 2 -->
+                                <div class="template-card"><img src="Resource/temp2.png" alt="Modern Executive Template Preview" class="template-img">
+                    <div class="template-overlay">
+                        <a class="btn" href="template/template2.html" target="_blank">Preview Template</a>
+                    </div>
+                    <div class="template-info">
+                        <h3>Creative Pro</h3>
+                        <p>For design and creative fields</p>
+                    </div>
+                </div>
+                
+                <!-- Temp 3 -->
+                          <div class="template-card"><img src="Resource/temp3.png" alt="Modern Executive Template Preview" class="template-img">
+                    <div class="template-overlay">
+                        <a class="btn" href="template/template3.html" target="_blank">Preview Template</a>
+                    </div>
+                    <div class="template-info">
+                        <h3>Tech Specialist</h3>
+                        <p>Perfect for IT professionals</p>
+                    </div>
+                </div>
+                
+                <!-- Temp 4 -->
+                            <div class="template-card"><img src="Resource/temp4.jpeg" alt="Modern Executive Template Preview" class="template-img">
+                    <div class="template-overlay">
+                        <a class="btn" href="template/template4.html" target="_blank">Preview Template</a>
+                    </div>
+                    <div class="template-info">
+                        <h3>Minimalist</h3>
+                        <p>Simple and elegant design</p>
+                    </div>
+                </div>
+
+                 <!-- Temp 5 -->
+                                <div class="template-card"><img src="Resource/temp5.png" alt="Modern Executive Template Preview" class="template-img">
+                    <div class="template-overlay">
+                        <a class="btn" href="template/template5.html" target="_blank">Preview Template</a>
+                    </div>
+                    <div class="template-info">
+                        <h3>Tech Specialist</h3>
+                        <p>Perfect for IT professionals</p>
+                    </div>
+                </div>
+                
+
+            
+
+                <!-- Temp6 -->
+                                <div class="template-card"><img src="Resource/temp6.jpeg" alt="Modern Executive Template Preview" class="template-img">
+                    <div class="template-overlay">
+                        <a class="btn" href="template/template6.html" target="_blank">Preview Template</a>
+                    </div>
+                    <div class="template-info">
+                        <h3>Tech Specialist</h3>
+                        <p>Perfect for IT professionals</p>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+    </section>
+
+   
+
+    <!-- 3 -->
+    <section class="section" id="how-it-works">
+  <div class="container">
+    <h2 class="section-title">How It Works</h2>
+    <div class="how-it-works">
+      <div class="works-container">
+        <div class="works-video">
+          <div class="video-placeholder" id="videoPlaceholder" style="cursor: pointer; text-align: center;">
+            <div id="playButton">
+              <i class="fas fa-play-circle" style="font-size: 4rem; margin-bottom: 20px;"></i>
+              <p>Quick Demo Video</p>
+            </div>
+            <!-- Hidden video element -->
+            <video id="demoVideo" width="100%" controls style="display: none;">
+              <source src="Resource/rr.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+        <div class="works-steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3>Choose a Template</h3>
+              <p>Browse our collection of professionally designed resume templates and pick the one that suits your style.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3>Fill in Your Details</h3>
+              <p>Enter your personal information, work experience, education, and skills in our easy-to-use form.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3>Customize & Download</h3>
+              <p>Preview your resume, make any final adjustments, then download in PDF format ready to share.</p>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 30px;">
+            <a href="#" class="btn">Start Creating</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+    <!-- 4-->
+    <section class="section" id="about">
+        <div class="container">
+            <h2 class="section-title">About Us</h2>
+            <div class="team-grid">
+
+                <!-- Member 1 -->
+                <div class="team-member">
+                    <div class="member-img">
+                        <img src="lerin.jpg" alt="Devadath"  class="profile-img" />
+    </div>
+                    <div class="member-info">
+                        <h3>Lerin</h3>
+                        <div class="member-role">Founder & CEO</div>
+                        <p>With 10+ years in instagram, LERIN knows what employers look for in a resume.</p>
+                        <div class="social-links">
+                            
+                            <a href="https://www.linkedin.com/in/lerin-liju-39736a334/" target="_blank" 
+                            rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                            
+                            <a href="https://github.com/TheLerin" target="_blank" 
+                            rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+
+                            <a href="https://www.instagram.com/lerinzx/" target="_blank" 
+                            rel="noopener noreferrer"> <i class="fab fa-instagram"></i></a>
+
+                              <a href="Resume/Lerin.html" target="_blank" 
+                            rel="noopener noreferrer"> <i class="fa-solid fa-user"></i></a>
+                            
+                            
+                            
+
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Member 2 -->
+                <div class="team-member">
+                     <div class="member-img">
+        <img src="jeevan.jpg" alt="Jeevan"  class="profile-img" />
+                    </div>
+                    <div class="member-info">
+                        <h3>Jeevan</h3>
+                        <div class="member-role">Design Director</div>
+                        <p>creates beautiful, functional designs that help resumes stand out.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            
+                            <a href="https://github.com/jeevvn" target="_blank" 
+                            rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+
+                           <a href="https://www.instagram.com/jeevaaaan_/" target="_blank" 
+                            rel="noopener noreferrer"> <i class="fab fa-instagram"></i></a>
+                            
+                                   <a href="Resume/jeevan.html" target="_blank" 
+                            rel="noopener noreferrer"> <i class="fa-solid fa-user"></i></a>
+
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Member 3 -->
+                <div class="team-member">
+    <div class="member-img">
+        <img src="dev.jpg" alt="Devadath"  class="profile-img" />
+    </div>
+    <div class="member-info">
+        <h3>Devadath</h3>
+        <div class="member-role">Developer</div>
+        <p>sharp problem-solving mindset and hands-on coding skills, he brings ideas to life </p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            
+                            <a href="https://github.com/devadathkrishna-2006" target="_blank" 
+                            rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+
+            <a href="https://www.instagram.com/devadath_krishna/" target="_blank" 
+                            rel="noopener noreferrer"> <i class="fab fa-instagram"></i></a>
+
+                            <a href="Resume/dev.html" target="_blank" 
+                            rel="noopener noreferrer"> <i class="fa-solid fa-user"></i></a>
+
+    </div>
+</div>
+</div>
+
+
+                               <!-- Member 4 -->                 
+                <div class="team-member">
+                    <div class="member-img">
+                        <img src="vishnu.png" alt="Devadath"  class="profile-img" />
+    </div>
+                    <div class="member-info">
+                        <h3>Vishnu</h3>
+                        <div class="member-role">Developer</div>
+                        <p>building projects, writing clean code, and constantly learning new tools and frameworks.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+
+                            <a href="https://github.com/TheLerin" target="_blank" 
+                            rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+
+                            <a href="https://www.instagram.com/lerinrl/" target="_blank" 
+                            rel="noopener noreferrer"> <i class="fab fa-instagram"></i></a>
+
+                            <a href="Resume/vishnu.html" target="_blank" 
+                            rel="noopener noreferrer"> <i class="fa-solid fa-user"></i></a>
+
+
+                        </div>
+                    </div>
+                </div>
+            
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>ResumeCraft</h3>
+                    <p>Creating professional resumes that help you land your dream job. Our tools make resume building quick, easy, and effective.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#templates">Templates</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#about">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://careerservices.fas.harvard.edu/resources/create-a-strong-resume/#resumesample" target="_blank">Resume Tips</a></li>
+                        <li><a href="https://careerservices.fas.harvard.edu/resources/create-a-strong-resume/#covertips" target="_blank">Cover Letter Samples</a></li>
+                        <li><a href="https://jobsearch.guide/" target="_blank">Job Search Guide</a></li>
+                        <li><a href="https://grow.google/certificates/interview-warmup/" target="_blank">Interview Preparation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column"> 
+                    <h3>Contact Us</h3>    
+                                              
+                    <ul class="footer-links">
+                        <li><a href="mailto:Leringov@gmail.com" >Leringov@gmail.com</a></li>
+                        <li><a href="tel:+91 8281324749">+91 8281324749</a></li>
+                        <li><a href="#">Amritapuri ,Kollam</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 ResumeCraft. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+<script src="java script/script.js"></script>
+
+    
+</body>
+</html>
+
+

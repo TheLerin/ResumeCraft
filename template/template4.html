@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vince Murray - Administrative Assistant Resume</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #eef2f7 0%, #d9e4f0 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .app-container {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+        
+        .resume-container {
+            width: 70%;
+            padding: 20px;
+            position: relative;
+            background-color: white;
+            overflow: hidden;
+        }
+        
+        .resume-paper {
+            width: 100%;
+            min-height: 1123px;
+            background-color: #ffffff;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            color: #333;
+        }
+        
+        .resume-header {
+            background: #2c3e50;
+            color: #ffffff;
+            padding: 40px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            min-height: 200px;
+        }
+        
+        .name-title {
+            flex-grow: 1;
+        }
+        
+        .resume-name {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .resume-title {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            color: #ecf0f1;
+        }
+        
+        .contact-header {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .resume-body {
+            display: flex;
+            padding: 0;
+        }
+        
+        .left-column {
+            width: 35%;
+            background-color: #f8f9fa;
+            padding: 40px 30px;
+            border-right: 1px solid #dee2e6;
+        }
+        
+        .right-column {
+            width: 65%;
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 35px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            color: #2c3e50;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .profile-section {
+            text-align: justify;
+            line-height: 1.6;
+            font-size: 15px;
+            color: #333;
+        }
+        
+        .skills-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .skill-item {
+            background-color: #e9ecef;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            text-align: left;
+            border-left: 4px solid #3498db;
+        }
+        
+        .experience-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .experience-item:last-child {
+            border-bottom: none;
+        }
+        
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+        
+        .company {
+            font-weight: 700;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+        
+        .dates {
+            color: #666;
+            font-size: 14px;
+            font-style: italic;
+        }
+        
+        .position {
+            font-weight: 600;
+            color: #3498db;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .description {
+            line-height: 1.6;
+            color: #333;
+            font-size: 15px;
+            padding-left: 20px;
+        }
+        
+        .description li {
+            margin-bottom: 8px;
+        }
+        
+        .editable {
+            padding: 8px 10px;
+            border: 1px dashed transparent;
+            border-radius: 4px;
+            transition: all 0.2s;
+            min-height: 20px;
+            outline: none;
+        }
+        
+        .editable:focus {
+            border: 1px dashed #3498db;
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        
+        .instructions {
+            text-align: center;
+            padding: 15px;
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            font-size: 16px;
+            border-top: 1px solid #bbdefb;
+            margin-top: 20px;
+        }
+        
+        /* Edit controls sidebar */
+        .edit-sidebar {
+            width: 30%;
+            background: linear-gradient(135deg, #2c3e50 0%, #1a2a3a 100%);
+            padding: 25px;
+            color: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-title {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .control-group {
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 18px;
+            border-radius: 10px;
+        }
+        
+        .control-group h3 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .control-group h3 i {
+            color: #3498db;
+        }
+        
+        .theme-options {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .theme-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .theme-btn:hover {
+            transform: scale(1.1);
+            border-color: white;
+        }
+        
+        .theme-btn.active {
+            transform: scale(1.1);
+            border-color: white;
+            box-shadow: 0 0 0 3px #3498db;
+        }
+        
+        .theme-dark { background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); }
+        .theme-blue { background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%); }
+        .theme-green { background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%); }
+        .theme-purple { background: linear-gradient(135deg, #8e44ad 0%, #6c3483 100%); }
+        
+        .action-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 8px;
+            background: #3498db;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .action-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .action-btn i {
+            margin-right: 8px;
+        }
+        
+        .hidden-file-input {
+            display: none;
+        }
+        
+        .font-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .font-btn {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .font-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .font-btn.active {
+            background: #3498db;
+            border-color: #3498db;
+        }
+        
+        .font-arial { font-family: Arial, sans-serif; }
+        .font-georgia { font-family: Georgia, serif; }
+        .font-tahoma { font-family: Tahoma, sans-serif; }
+        
+        /* PDF overlay */
+        .pdf-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .pdf-preview {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        @media (max-width: 1200px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .resume-container, .edit-sidebar {
+                width: 100%;
+            }
+            
+            .edit-sidebar {
+                order: -1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .resume-body {
+                flex-direction: column;
+            }
+            
+            .left-column, .right-column {
+                width: 100%;
+            }
+            
+            .left-column {
+                border-right: none;
+                border-bottom: 2px solid #dee2e6;
+            }
+            
+            .contact-header {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="resume-container">
+            <div class="resume-paper" id="resume-content">
+                <div class="resume-header">
+                    <div class="name-title">
+                        <h1 class="resume-name editable" contenteditable="true">VINCE MURRAY</h1>
+                        <div class="resume-title editable" contenteditable="true">ADMINISTRATIVE ASSISTANT</div>
+                        <div class="contact-header">
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span class="editable" contenteditable="true">murrayvince2@gmail.com</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span class="editable" contenteditable="true">2400 President Ave, Harbor City, CA 90710, United States</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <span class="editable" contenteditable="true">(460) 732-9961</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="resume-body">
+                    <div class="left-column">
+                        <div class="section">
+                            <h2 class="section-title">PROFILE</h2>
+                            <div class="profile-section editable" contenteditable="true">
+                                Proficient Administrative Assistant with over 7 years of office experience, specializing in administrative work, problem solving, planning, and optimal assistance. Known for increasing productivity and relieving workload of managerial staff. Proven efficiency with an ability to quickly learn and navigate any computer software program, or office filing system.
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h2 class="section-title">SKILLS</h2>
+                            <div class="skills-list">
+                                <div class="skill-item editable" contenteditable="true">Administrative Support Skills</div>
+                                <div class="skill-item editable" contenteditable="true">Inventory Control Skills</div>
+                                <div class="skill-item editable" contenteditable="true">Scheduling Skills</div>
+                                <div class="skill-item editable" contenteditable="true">Event Planning</div>
+                                <div class="skill-item editable" contenteditable="true">Dictation Skills</div>
+                                <div class="skill-item editable" contenteditable="true">Editing and Proofreading Skills</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="right-column">
+                        <div class="section">
+                            <h2 class="section-title">EMPLOYMENT HISTORY</h2>
+                            <div class="experience-item">
+                                <div class="experience-header">
+                                    <div class="company editable" contenteditable="true">Space Corporation, Dallas</div>
+                                    <div class="dates editable" contenteditable="true">2010 — Present</div>
+                                </div>
+                                <div class="position editable" contenteditable="true">Administrative Support Assistant</div>
+                                <div class="description">
+                                    <ul>
+                                        <li class="editable" contenteditable="true">Served as a direct assistant to Production Supervisor, supporting all aspects of production and office management.</li>
+                                        <li class="editable" contenteditable="true">Trusted to analyze and interpret data, and handle all shipments, deliveries, and material orders.</li>
+                                        <li class="editable" contenteditable="true">Known as the "go-to person" for all departments including Quality Control, Accounting, and Management.</li>
+                                        <li class="editable" contenteditable="true">Worked to alleviate executive overload by handling all customer interactions for company including walk-ins, email, phone, and fax interactions.</li>
+                                        <li class="editable" contenteditable="true">Coordinated and scheduled all company meetings, appointments, interviews.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="edit-sidebar">
+            <h2 class="sidebar-title"><i class="fas fa-sliders-h"></i> Resume Customization</h2>
+            
+            <div class="control-group">
+                <h3><i class="fas fa-palette"></i> Color Theme</h3>
+                <div class="theme-options">
+                    <div class="theme-btn theme-dark active" data-theme="dark"></div>
+                    <div class="theme-btn theme-blue" data-theme="blue"></div>
+                    <div class="theme-btn theme-green" data-theme="green"></div>
+                    <div class="theme-btn theme-purple" data-theme="purple"></div>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <h3><i class="fas fa-font"></i> Font Style</h3>
+                <div class="font-controls">
+                    <div class="font-btn font-arial active" data-font="arial">Arial</div>
+                    <div class="font-btn font-georgia" data-font="georgia">Georgia</div>
+                    <div class="font-btn font-tahoma" data-font="tahoma">Tahoma</div>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <h3><i class="fas fa-file-pdf"></i> Export Resume</h3>
+                <button class="action-btn" id="download-pdf">
+                    <i class="fas fa-download"></i> Download PDF
+                </button>
+                <button class="action-btn" id="preview-pdf">
+                    <i class="fas fa-eye"></i> Preview PDF
+                </button>
+            </div>
+            
+            <div class="control-group">
+                <h3><i class="fas fa-magic"></i> Enhance Resume</h3>
+                <button class="action-btn" id="suggest-improvements">
+                    <i class="fas fa-lightbulb"></i> Suggest Improvements
+                </button>
+                <button class="action-btn" id="reset-resume">
+                    <i class="fas fa-redo"></i> Reset to Default
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="pdf-overlay" id="pdf-overlay">
+        <div class="pdf-preview" id="pdf-preview">
+            <h2 style="text-align: center; margin-bottom: 20px;">PDF Preview</h2>
+            <p>Your PDF will be generated in the actual download. This is just a preview.</p>
+            <div id="pdf-content" style="margin-top: 20px;"></div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="action-btn" id="close-preview" style="width: auto; padding: 10px 30px;">
+                    <i class="fas fa-times"></i> Close Preview
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme selection
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Set theme based on data attribute
+                const theme = this.getAttribute('data-theme');
+                const header = document.querySelector('.resume-header');
+                
+                switch(theme) {
+                    case 'blue': 
+                        header.style.background = 'linear-gradient(135deg, #3498db 0%, #2c3e50 100%)';
+                        break;
+                    case 'green': 
+                        header.style.background = 'linear-gradient(135deg, #27ae60 0%, #1e8449 100%)';
+                        break;
+                    case 'purple': 
+                        header.style.background = 'linear-gradient(135deg, #8e44ad 0%, #6c3483 100%)';
+                        break;
+                    default: // dark
+                        header.style.background = '#2c3e50';
+                }
+            });
+        });
+        
+        // Font selection
+        document.querySelectorAll('.font-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.font-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Set font family for the resume
+                const font = this.getAttribute('data-font');
+                document.querySelector('.resume-paper').style.fontFamily = 
+                    font === 'georgia' ? 'Georgia, serif' : 
+                    font === 'tahoma' ? 'Tahoma, sans-serif' : 'Arial, sans-serif';
+            });
+        });
+
+        // PDF Download
+        document.getElementById('download-pdf').addEventListener('click', function () {
+            const element = document.getElementById('resume-content');
+            const opt = {
+                margin: 0,
+                filename: 'administrative_assistant_resume.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        });
+
+        // PDF Preview
+        document.getElementById('preview-pdf').addEventListener('click', () => {
+            const element = document.getElementById('resume-content');
+            const pdfOverlay = document.getElementById('pdf-overlay');
+            const pdfContent = document.getElementById('pdf-content');
+            
+            // Show overlay
+            pdfOverlay.style.display = 'flex';
+            
+            // Clone the resume content for preview
+            const clone = element.cloneNode(true);
+            clone.style.width = '210mm';
+            clone.style.margin = '0 auto';
+            clone.style.padding = '20px';
+            clone.style.backgroundColor = 'white';
+            clone.style.boxShadow = 'none';
+            
+            // Clear previous content and add new
+            pdfContent.innerHTML = '';
+            pdfContent.appendChild(clone);
+        });
+
+        // Close PDF Preview
+        document.getElementById('close-preview').addEventListener('click', () => {
+            document.getElementById('pdf-overlay').style.display = 'none';
+        });
+
+        // Suggest Improvements
+        document.getElementById('suggest-improvements').addEventListener('click', () => {
+            alert("Here are some suggestions to improve your resume:\n\n" +
+                  "1. Add quantifiable achievements (e.g., 'Increased office efficiency by 25%')\n" +
+                  "2. Include any relevant certifications or training\n" +
+                  "3. Add more specific software skills (e.g., Microsoft Office Suite)\n" +
+                  "4. Consider adding a professional summary at the top\n" +
+                  "5. Make sure all dates are consistent in format");
+        });
+
+        // Reset Resume
+        document.getElementById('reset-resume').addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset the resume to default? All your changes will be lost.')) {
+                // Reset all editable fields to their original content
+                const originalContent = {
+                    'resume-name': 'VINCE MURRAY',
+                    'resume-title': 'ADMINISTRATIVE ASSISTANT',
+                    'contact-item:nth-child(1) span': 'murrayvince2@gmail.com',
+                    'contact-item:nth-child(2) span': '2400 President Ave, Harbor City, CA 90710, United States',
+                    'contact-item:nth-child(3) span': '(460) 732-9961',
+                    'profile-section': 'Proficient Administrative Assistant with over 7 years of office experience, specializing in administrative work, problem solving, planning, and optimal assistance. Known for increasing productivity and relieving workload of managerial staff. Proven efficiency with an ability to quickly learn and navigate any computer software program, or office filing system.',
+                    'skill-item:nth-child(1)': 'Administrative Support Skills',
+                    'skill-item:nth-child(2)': 'Inventory Control Skills',
+                    'skill-item:nth-child(3)': 'Scheduling Skills',
+                    'skill-item:nth-child(4)': 'Event Planning',
+                    'skill-item:nth-child(5)': 'Dictation Skills',
+                    'skill-item:nth-child(6)': 'Editing and Proofreading Skills',
+                    'company': 'Space Corporation, Dallas',
+                    'dates': '2010 — Present',
+                    'position': 'Administrative Support Assistant',
+                    'description li:nth-child(1)': 'Served as a direct assistant to Production Supervisor, supporting all aspects of production and office management.',
+                    'description li:nth-child(2)': 'Trusted to analyze and interpret data, and handle all shipments, deliveries, and material orders.',
+                    'description li:nth-child(3)': 'Known as the "go-to person" for all departments including Quality Control, Accounting, and Management.',
+                    'description li:nth-child(4)': 'Worked to alleviate executive overload by handling all customer interactions for company including walk-ins, email, phone, and fax interactions.',
+                    'description li:nth-child(5)': 'Coordinated and scheduled all company meetings, appointments, interviews.'
+                };
+
+                // Set all editable fields back to original content
+                for (const [selector, text] of Object.entries(originalContent)) {
+                    const element = document.querySelector(`.${selector}`);
+                    if (element) {
+                        element.textContent = text;
+                    }
+                }
+
+                // Reset theme to dark
+                document.querySelector('.theme-dark').click();
+                
+                // Reset font to Arial
+                document.querySelector('.font-arial').click();
+            }
+        });
+
+        // Make all elements with contenteditable actually editable
+        document.querySelectorAll('[contenteditable]').forEach(element => {
+            element.addEventListener('focus', function() {
+                this.style.border = '1px dashed #3498db';
+                this.style.backgroundColor = 'rgba(52, 152, 219, 0.05)';
+            });
+            
+            element.addEventListener('blur', function() {
+                this.style.border = '1px dashed transparent';
+                this.style.backgroundColor = 'transparent';
+            });
+        });
+
+        // Auto-resize the name field to fit content
+        const nameField = document.querySelector('.resume-name');
+        nameField.addEventListener('input', function() {
+            const length = this.textContent.length;
+            if (length > 20) {
+                this.style.fontSize = Math.max(24, 42 - (length - 20) * 1.5) + 'px';
+            } else {
+                this.style.fontSize = '42px';
+            }
+        });
+
+        // Handle Enter key in editable fields to prevent new lines
+        document.querySelectorAll('.editable').forEach(editable => {
+            editable.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.blur();
+                }
+            });
+        });
+
+        // Save resume data to localStorage when editing
+        document.querySelectorAll('.editable').forEach(editable => {
+            editable.addEventListener('blur', function() {
+                localStorage.setItem('resumeData', document.getElementById('resume-content').innerHTML);
+            });
+        });
+
+        // Load resume data from localStorage if available
+        window.addEventListener('load', function() {
+            const savedData = localStorage.getItem('resumeData');
+            if (savedData) {
+                if (confirm('Would you like to load your previously saved resume?')) {
+                    document.getElementById('resume-content').innerHTML = savedData;
+                    // Reattach event listeners to the newly loaded elements
+                    document.querySelectorAll('.editable').forEach(element => {
+                        element.addEventListener('focus', function() {
+                            this.style.border = '1px dashed #3498db';
+                            this.style.backgroundColor = 'rgba(52, 152, 219, 0.05)';
+                        });
+                        
+                        element.addEventListener('blur', function() {
+                            this.style.border = '1px dashed transparent';
+                            this.style.backgroundColor = 'transparent';
+                        });
+                    });
+                }
+            }
+        });
+
+        // Print button functionality (additional)
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+P or Cmd+P for print
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                document.getElementById('download-pdf').click();
+            }
+        });
+
+        // Initialize with dark theme
+        document.querySelector('.theme-dark').click();
+    </script>
+</body>
+</html>

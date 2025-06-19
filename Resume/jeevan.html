@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume - Jeevan Krishna</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background: #f8f9fa;
+      color: silver;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .resume {
+      display: flex;
+      max-width: 1200px;
+      width: 100%;
+      background: #6e4c14;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      flex-direction: row;
+    }
+
+    .sidebar {
+      background: #5a3c0f;
+      padding: 30px 20px;
+      width: 35%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .sidebar img {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      border: 2px solid white;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar img:hover {
+      transform: scale(1.1);
+    }
+
+    .sidebar h1 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    .sidebar p {
+      font-size: 16px;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+
+    .sidebar h2 {
+      font-size: 18px;
+      margin: 20px 0 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      padding-bottom: 5px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .sidebar ul li {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+
+    .sidebar .contact a {
+      display: block;
+      margin: 5px 0;
+      color: silver;
+      text-decoration: none;
+    }
+
+    .sidebar .contact img {
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+      margin-right: 8px;
+      border-radius: 4px;
+    }
+
+    .main-content {
+      padding: 30px;
+      width: 65%;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section h2 {
+      font-size: 22px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding-bottom: 5px;
+    }
+
+    .section p,
+    .section li {
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .education-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .education-table th,
+    .education-table td {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 10px;
+      text-align: center;
+    }
+
+    .education-table th {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    ul li {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px;
+      margin-bottom: 5px;
+      border-radius: 5px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .resume {
+        flex-direction: column;
+      }
+
+      .sidebar,
+      .main-content {
+        width: 100%;
+      }
+
+      .sidebar {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="resume">
+    <div class="sidebar">
+      <img src="passport pic.jpg" alt="Profile Picture" />
+      <h1>Jeevan Krishna</h1>
+      <p>B.Tech CSE AI Student</p>
+
+      <h2>Contact</h2>
+      <p><strong>Phone:</strong> +91 8848761514</p>
+      <p><strong>Email:</strong> jeevankrishnakollam@gmail.com</p>
+      <p><strong>Location:</strong> Valathungal, Kollam</p>
+      <div class="contact">
+        <a href="https://github.com/jeevankrishna" target="_blank">
+          <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub" />
+          GitHub
+        </a>
+        <a href="https://instagram.com/jeevaaaan_" target="_blank">
+          <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="Instagram" />
+          Instagram
+        </a>
+      </div>
+
+      <h2>Languages</h2>
+      <ul>
+        <li>Malayalam (Native)</li>
+        <li>English (Fluent)</li>
+        <li>Hindi</li>
+      </ul>
+
+      <h2>Skills</h2>
+      <ul>
+        <li>Programming</li>
+        <li>Creativity</li>
+        <li>Dance</li>
+      </ul>
+    </div>
+
+    <div class="main-content">
+      <div class="section">
+        <h2>Education</h2>
+        <table class="education-table">
+          <thead>
+            <tr>
+              <th>Institution</th>
+              <th>Years</th>
+              <th>Degree / Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Amrita Viswa Vidyapeetam</td>
+              <td>2024 - 2028</td>
+              <td>B.Tech in CSE (AI)</td>
+            </tr>
+            <tr>
+              <td>SFS Public School</td>
+              <td>2022 - 2024</td>
+              <td>Higher Secondary Education</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2>About Me</h2>
+        <p>
+          As a motivated Computer Science and AI engineering student, I aim to contribute to the software industry while enhancing my skills in an environment that values learning and innovation. My technical expertise includes C, Java, and Python.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2>Workshops</h2>
+        <ul>
+          <li><strong>AI and ML Workshop (2024)</strong> - Covered machine learning models and real-world applications.</li>
+          <li><strong>Nanotechnology Workshop (2024)</strong> - Explored nanotech and insights into emerging startups.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Activities and Interests</h2>
+        <ul>
+          <li>Basketball</li>
+          <li>Football</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

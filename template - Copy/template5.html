@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photographer Resume Editor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: var(--bg-color);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .app-container {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .resume-container {
+            width: 70%;
+            padding: 20px;
+            position: relative;
+            background-color: white;
+            overflow: hidden;
+        }
+        .resume-paper {
+            width: 100%;
+            min-height: 1123px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .resume-header {
+            background: var(--header-bg);
+            padding: 30px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            min-height: 220px;
+            border-bottom: 1px solid var(--border-color);
+            justify-content: space-between;
+        }
+        .resume-header * {
+            color: inherit !important;
+        }
+        .name-title {
+            flex-grow: 1;
+            text-align: left;
+        }
+        .profile-img-container {
+            width: 220px;
+            height: 220px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 3px solid var(--border-color);
+            background-color: var(--skill-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 40px;
+            margin-right: 0;
+            flex-shrink: 0;
+            cursor: not-allowed;
+            position: relative;
+            opacity: 0.85;
+        }
+        .profile-img-placeholder {
+            color: var(--text-color);
+            text-align: center;
+            font-size: 14px;
+            padding: 10px;
+        }
+        .profile-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        .resume-name {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+            color: #222 !important;
+        }
+        .contact-header {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #444 !important;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .resume-body {
+            display: flex;
+            padding: 0;
+        }
+        .left-column {
+            width: 35%;
+            background-color: var(--sidebar-bg);
+            padding: 30px;
+            border-right: 1px solid var(--border-color);
+        }
+        .right-column {
+            width: 65%;
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-size: 16px;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .profile-section {
+            text-align: left;
+            line-height: 1.5;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .skill-item {
+            background-color: var(--skill-bg);
+            color: var(--skill-text);
+            border: 1px solid var(--skill-border);
+            padding: 8px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: left;
+        }
+        .experience-item {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .experience-item:last-child {
+            border-bottom: none;
+        }
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 5px;
+        }
+        .company {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--primary-color);
+        }
+        .dates {
+            color: var(--secondary-color);
+            font-size: 13px;
+        }
+        .position {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .description {
+            line-height: 1.5;
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        .education-item {
+            margin-bottom: 15px;
+        }
+        .education-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .institution {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--primary-color);
+        }
+        .degree {
+            font-weight: 500;
+            color: var(--secondary-color);
+            margin-bottom: 3px;
+            font-size: 14px;
+        }
+        .editable {
+            padding: 5px 8px;
+            border: 1px dashed transparent;
+            border-radius: 3px;
+            transition: all 0.2s;
+            min-height: 18px;
+            outline: none;
+        }
+        .editable:focus {
+            border: 1px dashed #3498db;
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        .instructions {
+            text-align: center;
+            padding: 10px;
+            background-color: #f0f8ff;
+            color: #0066cc;
+            font-size: 14px;
+            border-top: 1px solid #ddeeff;
+            margin-top: 15px;
+        }
+        /* Edit controls sidebar */
+        .edit-sidebar {
+            width: 30%;
+            background: var(--sidebar-bg);
+            color: var(--header-text);
+            padding: 20px;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar-title {
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--primary-color);
+        }
+        .control-group {
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .control-group h3 {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+        .control-group h3 i {
+            color: #3498db;
+        }
+        .theme-options {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .theme-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .theme-btn:hover {
+            transform: scale(1.1);
+            border-color: white;
+        }
+        .theme-btn.active {
+            transform: scale(1.1);
+            border-color: white;
+            box-shadow: 0 0 0 3px #3498db;
+        }
+        .theme-beige { background: linear-gradient(135deg, #f5e9da 0%, #e9d7b9 100%); }
+        .theme-dark { background: linear-gradient(135deg, #9aa1a8 0%, #2980d8 100%); }
+        .theme-green { background: linear-gradient(135deg, #096218 0%, #054211 100%); }
+        .theme-purple { background: linear-gradient(135deg, #fdfbfe 0%, #c51a92 100%); }
+        .action-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 6px;
+            background: #3498db;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .action-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .action-btn i {
+            margin-right: 8px;
+        }
+        .hidden-file-input {
+            display: none;
+        }
+        /* Theme color variables */
+        :root {
+            --bg-color: #fdf6ef;
+            --header-bg: linear-gradient(135deg, #f5e9da 0%, #e9d7b9 100%);
+            --header-text: #333333;
+            --sidebar-bg: #f9f6f2;
+            --text-color: #5a4632;
+            --accent-color: #b48a4a;
+            --border-color: #b48a4a;
+            --skill-bg: #f5e9da;
+            --skill-text: #b48a4a;
+            --skill-border: #e9d7b9;
+            --primary-color: #b48a4a;
+            --secondary-color: #e9d7b9;
+        }
+        /* PDF overlay */
+        .pdf-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        .pdf-preview {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .photo-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .gallery-photo {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid #eee;
+            background: #fafafa;
+        }
+        .add-photo-btn {
+            width: 90px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #b48a4a;
+            border-radius: 6px;
+            background: #f5e9da;
+            color: #b48a4a;
+            font-size: 32px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .add-photo-btn:hover {
+            background: #f9f6f2;
+        }
+        @media (max-width: 1200px) {
+            .app-container {
+                flex-direction: column;
+            }
+            .resume-container, .edit-sidebar {
+                width: 100%;
+            }
+            .edit-sidebar {
+                order: -1;
+            }
+        }
+        @media (max-width: 768px) {
+            .resume-header {
+                flex-direction: column;
+                text-align: center;
+                justify-content: center;
+            }
+            .profile-img-container {
+                margin-left: 0;
+                margin-bottom: 20px;
+            }
+            .name-title {
+                text-align: center;
+            }
+            .resume-body {
+                flex-direction: column;
+            }
+            .left-column, .right-column {
+                width: 100%;
+            }
+            .left-column {
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            .photo-gallery {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="resume-container">
+            <div class="resume-paper" id="resume-content">
+                <div class="resume-header">
+                    <div class="name-title">
+                        <h1 class="resume-name editable" contenteditable="true">DANIEL JONES</h1>
+                        <div class="contact-header">
+                            <div class="contact-item">
+                                <span class="editable" contenteditable="true">Professional Photographer</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span class="editable" contenteditable="true">1977 Coleman Blvd, Vancouver, B.C. V6J 2H5</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span class="editable" contenteditable="true">daniel.jones@example.com</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <span class="editable" contenteditable="true">(555) 123-4567</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-img-container" id="profile-img" title="Profile photo upload disabled">
+                        <div class="profile-img-placeholder">Profile Photo<br></div>
+                        <img id="profile-image" src="" alt="Profile">
+                    </div>
+                </div>
+                <div class="resume-body">
+                    <div class="left-column">
+                        <div class="section">
+                            <h2 class="section-title">PROFILE</h2>
+                            <div class="profile-section editable" contenteditable="true">
+                                Creative and passionate Photographer with 7+ years of experience in portrait, event, and commercial photography. Adept at capturing moments that tell a story and evoke emotion. Skilled in advanced editing, lighting, and client communication. Dedicated to delivering high-quality images that exceed client expectations.
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h2 class="section-title">SKILLS</h2>
+                            <div class="skills-grid">
+                                <div class="skill-item editable" contenteditable="true">Portrait Photography</div>
+                                <div class="skill-item editable" contenteditable="true">Event Photography</div>
+                                <div class="skill-item editable" contenteditable="true">Product Photography</div>
+                                <div class="skill-item editable" contenteditable="true">Photo Editing (Lightroom/Photoshop)</div>
+                                <div class="skill-item editable" contenteditable="true">Studio Lighting</div>
+                                <div class="skill-item editable" contenteditable="true">Natural Light Techniques</div>
+                                <div class="skill-item editable" contenteditable="true">Client Communication</div>
+                                <div class="skill-item editable" contenteditable="true">Digital Asset Management</div>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h2 class="section-title">CERTIFICATIONS</h2>
+                            <div class="education-item">
+                                <div class="degree editable" contenteditable="true">Certified Professional Photographer (CPP)</div>
+                                <div class="dates editable" contenteditable="true">2021</div>
+                            </div>
+                            <div class="education-item">
+                                <div class="degree editable" contenteditable="true">Adobe Certified Expert (Photoshop)</div>
+                                <div class="dates editable" contenteditable="true">2020</div>
+                            </div>
+                            <div class="education-item">
+                                <div class="degree editable" contenteditable="true">Lighting Masterclass</div>
+                                <div class="dates editable" contenteditable="true">2019</div>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h2 class="section-title">PHOTO GALLERY</h2>
+                            <div class="photo-gallery" id="photo-gallery">
+                                <!-- Gallery images will be inserted here -->
+                                <div class="add-photo-btn" id="add-photo-btn" title="Add a photo">
+                                    <i class="fas fa-plus"></i>
+                                </div>
+                            </div>
+                            <input type="file" id="gallery-photo-input" class="hidden-file-input" accept="image/*" multiple>
+                        </div>
+                    </div>
+                    <div class="right-column">
+                        <div class="section">
+                            <h2 class="section-title">EXPERIENCE</h2>
+                            <div class="experience-item">
+                                <div class="experience-header">
+                                    <div class="company editable" contenteditable="true">Freelance Photographer</div>
+                                    <div class="dates editable" contenteditable="true">2017 - Present</div>
+                                </div>
+                                <div class="position editable" contenteditable="true">Lead Photographer</div>
+                                <div class="description editable" contenteditable="true">
+                                    Captured portraits, events, and commercial products for 100+ clients. Managed all aspects of shoots from planning to editing. Built strong client relationships and maintained a 98% satisfaction rate.
+                                </div>
+                            </div>
+                            <div class="experience-item">
+                                <div class="experience-header">
+                                    <div class="company editable" contenteditable="true">Vancouver StudioWorks</div>
+                                    <div class="dates editable" contenteditable="true">2015 - 2017</div>
+                                </div>
+                                <div class="position editable" contenteditable="true">Studio Photographer</div>
+                                <div class="description editable" contenteditable="true">
+                                    Specialized in studio lighting and portraiture. Collaborated with stylists and models to create compelling images for commercial campaigns and magazines.
+                                </div>
+                            </div>
+                            <div class="experience-item">
+                                <div class="experience-header">
+                                    <div class="company editable" contenteditable="true">Moments Captured Events</div>
+                                    <div class="dates editable" contenteditable="true">2013 - 2015</div>
+                                </div>
+                                <div class="position editable" contenteditable="true">Event Photographer</div>
+                                <div class="description editable" contenteditable="true">
+                                    Photographed weddings, corporate events, and concerts. Delivered edited galleries within tight deadlines and received positive client testimonials.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h2 class="section-title">EDUCATION</h2>
+                            <div class="education-item">
+                                <div class="education-header">
+                                    <div class="institution editable" contenteditable="true">Vancouver School of Art</div>
+                                    <div class="dates editable" contenteditable="true">2013</div>
+                                </div>
+                                <div class="degree editable" contenteditable="true">Bachelor of Fine Arts in Photography</div>
+                            </div>
+                            <div class="education-item">
+                                <div class="education-header">
+                                    <div class="institution editable" contenteditable="true">West Coast Photography Institute</div>
+                                    <div class="dates editable" contenteditable="true">2012</div>
+                                </div>
+                                <div class="degree editable" contenteditable="true">Photography Diploma</div>
+                            </div>
+                        </div>
+                        <div class="section">
+                            <h2 class="section-title">ACHIEVEMENTS</h2>
+                            <div class="description editable" contenteditable="true">
+                                • Published in National Geographic's "Emerging Photographers" collection (2018)<br>
+                                • Winner of Vancouver Art Council's Photography Competition (2017)<br>
+                                • Featured in 5 local gallery exhibitions<br>
+                                • Maintained 98% client satisfaction rating across all projects
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="instructions">
+                    <i class="fas fa-edit"></i> Click anywhere on the resume to edit content. 
+                    Your resume will automatically fit on one page for PDF export.
+                </div>
+            </div>
+        </div>
+        <div class="edit-sidebar">
+            <h2 class="sidebar-title"><i class="fas fa-sliders-h"></i> Resume Customization</h2>
+            <div class="control-group">
+                <h3><i class="fas fa-palette"></i> Color Theme</h3>
+                <div class="theme-options">
+                    <div class="theme-btn theme-beige active" data-theme="beige"></div>
+                    <div class="theme-btn theme-dark" data-theme="dark"></div>
+                    <div class="theme-btn theme-green" data-theme="green"></div>
+                    <div class="theme-btn theme-purple" data-theme="purple"></div>
+                </div>
+            </div>
+            <div class="control-group">
+                <h3><i class="fas fa-camera"></i> Profile Photo</h3>
+                <button class="action-btn" id="upload-photo">
+                    <i class="fas fa-upload"></i> Upload Photo
+                </button>
+                <button class="action-btn" id="remove-photo">
+                    <i class="fas fa-trash"></i> Remove Photo
+                </button>
+                <input type="file" id="photo-input" class="hidden-file-input" accept="image/*" disabled>
+            </div>
+            <div class="control-group">
+                <h3><i class="fas fa-file-pdf"></i> Export Resume</h3>
+                <button class="action-btn" id="download-pdf">
+                    <i class="fas fa-download"></i> Download PDF
+                </button>
+                <button class="action-btn" id="preview-pdf">
+                    <i class="fas fa-eye"></i> Preview PDF
+                </button>
+            </div>
+            <div class="control-group">
+                <h3><i class="fas fa-magic"></i> Enhance Resume</h3>
+                <button class="action-btn" id="suggest-improvements">
+                    <i class="fas fa-lightbulb"></i> Suggest Improvements
+                </button>
+                <button class="action-btn" id="reset-resume">
+                    <i class="fas fa-redo"></i> Reset to Default
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="pdf-overlay" id="pdf-overlay">
+        <div class="pdf-preview" id="pdf-preview">
+            <h2 style="text-align: center; margin-bottom: 20px;">PDF Preview</h2>
+            <p>Your PDF will be generated in the actual download. This is just a preview.</p>
+            <div id="pdf-content" style="margin-top: 20px;"></div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="action-btn" id="close-preview" style="width: auto; padding: 10px 30px;">
+                    <i class="fas fa-times"></i> Close Preview
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Theme selection (first theme is beige)
+        function setTheme(theme) {
+            const root = document.documentElement;
+            switch(theme) {
+                case 'green':
+                    root.style.setProperty('--primary-color', '#27ae60');
+                    root.style.setProperty('--secondary-color', '#2ecc71');
+                    root.style.setProperty('--accent-color', '#e8f5e8');
+                    root.style.setProperty('--bg-color', '#ffffff');
+                    root.style.setProperty('--header-bg', 'linear-gradient(135deg, #27ae60 0%, #2ecc71 100%)');
+                    root.style.setProperty('--sidebar-bg', '#f8f9fa');
+                    root.style.setProperty('--text-color', '#2c3e50');
+                    root.style.setProperty('--border-color', '#27ae60');
+                    root.style.setProperty('--skill-bg', '#e8f5e8');
+                    root.style.setProperty('--skill-text', '#2e7d32');
+                    root.style.setProperty('--skill-border', '#c8e6c9');
+                    break;
+                case 'purple':
+                    root.style.setProperty('--primary-color', '#8e44ad');
+                    root.style.setProperty('--secondary-color', '#9b59b6');
+                    root.style.setProperty('--accent-color', '#f3e5f5');
+                    root.style.setProperty('--bg-color', '#ffffff');
+                    root.style.setProperty('--header-bg', 'linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%)');
+                    root.style.setProperty('--sidebar-bg', '#f8f9fa');
+                    root.style.setProperty('--text-color', '#2c3e50');
+                    root.style.setProperty('--border-color', '#8e44ad');
+                    root.style.setProperty('--skill-bg', '#f3e5f5');
+                    root.style.setProperty('--skill-text', '#7b1fa2');
+                    root.style.setProperty('--skill-border', '#ce93d8');
+                    break;
+                case 'dark':
+                    root.style.setProperty('--primary-color', '#2c3e50');
+                    root.style.setProperty('--secondary-color', '#2980d8');
+                    root.style.setProperty('--accent-color', '#e6f2ff');
+                    root.style.setProperty('--bg-color', '#ffffff');
+                    root.style.setProperty('--header-bg', 'linear-gradient(135deg, #9aa1a8 0%, #2980d8 100%)');
+                    root.style.setProperty('--sidebar-bg', '#f9f9f9');
+                    root.style.setProperty('--text-color', '#555555');
+                    root.style.setProperty('--border-color', '#dddddd');
+                    root.style.setProperty('--skill-bg', '#ffffff');
+                    root.style.setProperty('--skill-text', '#333333');
+                    root.style.setProperty('--skill-border', '#eeeeee');
+                    break;
+                default: // beige
+                    root.style.setProperty('--primary-color', '#b48a4a');
+                    root.style.setProperty('--secondary-color', '#e9d7b9');
+                    root.style.setProperty('--accent-color', '#f5e9da');
+                    root.style.setProperty('--bg-color', '#fdf6ef');
+                    root.style.setProperty('--header-bg', 'linear-gradient(135deg, #f5e9da 0%, #e9d7b9 100%)');
+                    root.style.setProperty('--sidebar-bg', '#f9f6f2');
+                    root.style.setProperty('--text-color', '#5a4632');
+                    root.style.setProperty('--border-color', '#b48a4a');
+                    root.style.setProperty('--skill-bg', '#f5e9da');
+                    root.style.setProperty('--skill-text', '#b48a4a');
+                    root.style.setProperty('--skill-border', '#e9d7b9');
+            }
+        }
+        // Attach event listeners to theme buttons
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                setTheme(this.getAttribute('data-theme'));
+            });
+        });
+        // Set initial theme to beige
+        setTheme('beige');
+        // Disable profile photo upload
+        document.getElementById('upload-photo').disabled = true;
+        document.getElementById('remove-photo').disabled = true;
+        document.getElementById('photo-input').disabled = true;
+        // Gallery photo logic
+        const galleryInput = document.getElementById('gallery-photo-input');
+        const gallery = document.getElementById('photo-gallery');
+        const addPhotoBtn = document.getElementById('add-photo-btn');
+        // Load gallery from localStorage
+        function loadGallery() {
+            gallery.querySelectorAll('.gallery-photo').forEach(img => img.remove());
+            const saved = localStorage.getItem('photographerGallery');
+            if (saved) {
+                try {
+                    const arr = JSON.parse(saved);
+                    arr.forEach(src => {
+                        const img = document.createElement('img');
+                        img.src = src;
+                        img.className = 'gallery-photo';
+                        gallery.insertBefore(img, addPhotoBtn);
+                    });
+                } catch {}
+            }
+        }
+        // Save gallery to localStorage
+        function saveGallery() {
+            const imgs = Array.from(gallery.querySelectorAll('.gallery-photo')).map(img => img.src);
+            localStorage.setItem('photographerGallery', JSON.stringify(imgs));
+        }
+        addPhotoBtn.addEventListener('click', () => {
+            galleryInput.click();
+        });
+        galleryInput.addEventListener('change', e => {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = evt => {
+                    const img = document.createElement('img');
+                    img.src = evt.target.result;
+                    img.className = 'gallery-photo';
+                    gallery.insertBefore(img, addPhotoBtn);
+                    saveGallery();
+                };
+                reader.readAsDataURL(file);
+            });
+            galleryInput.value = '';
+        });
+        // Remove photo on double click
+        gallery.addEventListener('dblclick', function(e) {
+            if (e.target.classList.contains('gallery-photo')) {
+                if (confirm('Remove this photo?')) {
+                    e.target.remove();
+                    saveGallery();
+                }
+            }
+        });
+        loadGallery();
+        // PDF Download
+        document.getElementById('download-pdf').addEventListener('click', () => {
+            const element = document.getElementById('resume-content');
+            const opt = {
+                margin: 10,
+                filename: 'photographer_resume.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        });
+        // PDF Preview
+        document.getElementById('preview-pdf').addEventListener('click', () => {
+            const element = document.getElementById('resume-content');
+            const pdfOverlay = document.getElementById('pdf-overlay');
+            const pdfContent = document.getElementById('pdf-content');
+            pdfOverlay.style.display = 'flex';
+            const clone = element.cloneNode(true);
+            clone.style.width = '210mm';
+            clone.style.margin = '0 auto';
+            clone.style.padding = '20px';
+            clone.style.backgroundColor = 'white';
+            clone.style.boxShadow = 'none';
+            pdfContent.innerHTML = '';
+            pdfContent.appendChild(clone);
+        });
+        // Close PDF Preview
+        document.getElementById('close-preview').addEventListener('click', () => {
+            document.getElementById('pdf-overlay').style.display = 'none';
+        });
+        // Suggest Improvements
+        document.getElementById('suggest-improvements').addEventListener('click', () => {
+            alert("Here are some suggestions to improve your resume:\n\n" +
+                  "1. Quantify your achievements (e.g., 'Increased client satisfaction by 30%')\n" +
+                  "2. Add more specific photography skills relevant to your niche\n" +
+                  "3. Include any special photography techniques you specialize in\n" +
+                  "4. Consider adding client testimonials or notable clients\n" +
+                  "5. Make sure all dates are consistent in format");
+        });
+        // Reset Resume
+        document.getElementById('reset-resume').addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset the resume to default? All your changes will be lost.')) {
+                localStorage.removeItem('resumeData');
+                localStorage.removeItem('photographerGallery');
+                location.reload();
+            }
+        });
+        // Make all elements with contenteditable actually editable
+        document.querySelectorAll('[contenteditable]').forEach(element => {
+            element.addEventListener('focus', function() {
+                this.style.border = '1px dashed var(--accent-color)';
+                this.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+            });
+            element.addEventListener('blur', function() {
+                this.style.border = '1px dashed transparent';
+                this.style.backgroundColor = 'transparent';
+            });
+        });
+        // Auto-resize the name field to fit content
+        const nameField = document.querySelector('.resume-name');
+        nameField.addEventListener('input', function() {
+            const length = this.textContent.length;
+            if (length > 20) {
+                this.style.fontSize = Math.max(24, 48 - (length - 20) * 1.5) + 'px';
+            } else {
+                this.style.fontSize = '48px';
+            }
+        });
+        // Handle Enter key in editable fields to prevent new lines (except for multi-line fields)
+        document.querySelectorAll('.editable').forEach(editable => {
+            editable.addEventListener('keydown', function(e) {
+                const isMultiLine = this.classList.contains('profile-section') ||
+                                  this.classList.contains('description');
+                if (e.key === 'Enter' && !isMultiLine) {
+                    e.preventDefault();
+                    this.blur();
+                }
+            });
+        });
+        // Save resume data to localStorage when editing
+        document.querySelectorAll('.editable').forEach(editable => {
+            editable.addEventListener('blur', function() {
+                localStorage.setItem('resumeData', document.getElementById('resume-content').innerHTML);
+            });
+        });
+        // Load resume data from localStorage if available
+        window.addEventListener('load', function() {
+            const savedData = localStorage.getItem('resumeData');
+            if (savedData) {
+                if (confirm('Would you like to load your previously saved resume?')) {
+                    document.getElementById('resume-content').innerHTML = savedData;
+                    document.querySelectorAll('.editable').forEach(element => {
+                        element.addEventListener('focus', function() {
+                            this.style.border = '1px dashed var(--accent-color)';
+                            this.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                        });
+                        element.addEventListener('blur', function() {
+                            this.style.border = '1px dashed transparent';
+                            this.style.backgroundColor = 'transparent';
+                        });
+                    });
+                    loadGallery();
+                }
+            }
+        });
+        // Print button functionality (additional)
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                document.getElementById('download-pdf').click();
+            }
+        });
+        // Help tooltips
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('mouseover', function() {
+                const tooltip = document.createElement('div');
+                tooltip.className = 'tooltip';
+                tooltip.textContent = this.getAttribute('data-tooltip') || '';
+                tooltip.style.position = 'absolute';
+                tooltip.style.backgroundColor = 'rgba(0,0,0,0.8)';
+                tooltip.style.color = 'white';
+                tooltip.style.padding = '5px 10px';
+                tooltip.style.borderRadius = '4px';
+                tooltip.style.fontSize = '12px';
+                tooltip.style.zIndex = '100';
+                tooltip.style.bottom = '100%';
+                tooltip.style.left = '50%';
+                tooltip.style.transform = 'translateX(-50%)';
+                tooltip.style.whiteSpace = 'nowrap';
+                if (tooltip.textContent) {
+                    this.appendChild(tooltip);
+                }
+            });
+            btn.addEventListener('mouseout', function() {
+                const tooltip = this.querySelector('.tooltip');
+                if (tooltip) {
+                    tooltip.remove();
+                }
+            });
+        });
+        // Auto-save every 30 seconds
+        setInterval(() => {
+            if (document.querySelector('.editable:focus')) {
+                localStorage.setItem('resumeData', document.getElementById('resume-content').innerHTML);
+                saveGallery();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>
