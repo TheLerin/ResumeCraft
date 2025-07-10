@@ -879,15 +879,110 @@
                 return;
             }
             
+            // Get current CSS variable values
+            const rootStyles = getComputedStyle(document.documentElement);
+            const headerColor = rootStyles.getPropertyValue('--header-color').trim() || '#2c3e50';
+            const contactBarColor = rootStyles.getPropertyValue('--contact-bar').trim() || '#34495e';
+            const accentColor = rootStyles.getPropertyValue('--accent-color').trim() || '#e67e22';
+            
             // Remove instructions from the element temporarily
             const instructions = element.querySelector('.instructions');
             if (instructions) {
                 instructions.style.display = 'none';
             }
             
-            // Determine current theme background color
-            const activeTheme = document.querySelector('.theme-btn.active');
-            const currentTheme = activeTheme ? activeTheme.getAttribute('data-theme') : '1';
+            // Store original styles of all elements to restore later
+            const elementsToRestore = [];
+            
+            // Function to backup and apply styles
+            function backupAndSetStyles(selector, styles) {
+                const elements = element.querySelectorAll(selector);
+                elements.forEach(el => {
+                    const originalStyles = {};
+                    Object.keys(styles).forEach(prop => {
+                        originalStyles[prop] = el.style[prop];
+                        el.style[prop] = styles[prop];
+                    });
+                    elementsToRestore.push({ element: el, styles: originalStyles });
+                });
+            }
+            
+            // Apply explicit styles for PDF generation
+            
+            // Header styles
+            backupAndSetStyles('.resume-header', {
+                background: headerColor,
+                color: 'white'
+            });
+            
+            // Contact bar styles
+            backupAndSetStyles('.contact-bar', {
+                background: contactBarColor,
+                color: 'white'
+            });
+            
+            // Section titles
+            backupAndSetStyles('.section-title', {
+                color: accentColor,
+                borderBottomColor: accentColor
+            });
+            
+            // Position titles
+            backupAndSetStyles('.position-title', {
+                color: accentColor
+            });
+            
+            // Company names
+            backupAndSetStyles('.company-name', {
+                color: '#2c3e50'
+            });
+            
+            // Profile text
+            backupAndSetStyles('.profile-text', {
+                color: '#333'
+            });
+            
+            // Job descriptions
+            backupAndSetStyles('.job-description', {
+                color: '#555'
+            });
+            
+            // Achievement list items
+            backupAndSetStyles('.achievements-list li', {
+                color: '#555'
+            });
+            
+            // Skill tags
+            backupAndSetStyles('.skill-tag', {
+                background: accentColor,
+                color: 'white'
+            });
+            
+            // Certification names
+            backupAndSetStyles('.cert-name', {
+                color: accentColor
+            });
+            
+            // Certification issuers
+            backupAndSetStyles('.cert-issuer', {
+                color: '#666'
+            });
+            
+            // Experience items border
+            backupAndSetStyles('.experience-item', {
+                borderLeftColor: accentColor
+            });
+            
+            // All text elements
+            backupAndSetStyles('*', {
+                color: element.style.color || '#333'
+            });
+            
+            // Resume body
+            backupAndSetStyles('.resume-body', {
+                background: 'white',
+                color: '#333'
+            });
             
             // Set background color - use white for better PDF readability
             let themeBackground = '#ffffff';
@@ -907,7 +1002,7 @@
 
             document.body.removeChild(clone); // cleanup
 
-            // Backup styles
+            // Backup main element styles
             const originalTransform = element.style.transform;
             const originalTransformOrigin = element.style.transformOrigin;
             const originalWidth = element.style.width;
@@ -956,7 +1051,14 @@
 
             setTimeout(() => {
                 html2pdf().set(opt).from(element).save().then(() => {
-                    // Restore original styles
+                    // Restore all element styles
+                    elementsToRestore.forEach(item => {
+                        Object.keys(item.styles).forEach(prop => {
+                            item.element.style[prop] = item.styles[prop];
+                        });
+                    });
+                    
+                    // Restore main element styles
                     element.style.transform = originalTransform;
                     element.style.transformOrigin = originalTransformOrigin;
                     element.style.width = originalWidth;
@@ -979,7 +1081,14 @@
                     // Error handling
                     console.error('PDF generation error:', error);
                     
-                    // Restore original styles on error
+                    // Restore all element styles on error
+                    elementsToRestore.forEach(item => {
+                        Object.keys(item.styles).forEach(prop => {
+                            item.element.style[prop] = item.styles[prop];
+                        });
+                    });
+                    
+                    // Restore main element styles on error
                     element.style.transform = originalTransform;
                     element.style.transformOrigin = originalTransformOrigin;
                     element.style.width = originalWidth;
