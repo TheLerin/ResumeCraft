@@ -3,7 +3,7 @@ const themeToggle = document.getElementById('themeToggle');
 const body = document.body;
 
 // Check for saved theme preference
-if (localStorage.getItem('theme') === 'dark') {
+if (localStorage.getItem('theme') === 'dark') { 
     body.classList.add('dark-mode');
     themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
 }
