@@ -799,6 +799,26 @@ case 'green':
               document.getElementById('download-pdf').addEventListener('click', function () {
     const element = document.getElementById('resume-content');
 
+    // Get current theme background color
+    const activeTheme = document.querySelector('.theme-btn.active');
+    const currentTheme = activeTheme ? activeTheme.getAttribute('data-theme') : 'dark';
+    
+    // Set background color based on current theme
+    let themeBackground;
+    switch(currentTheme) {
+        case 'beige':
+            themeBackground = '#f5f5dc';
+            break;
+        case 'red':
+            themeBackground = '#ffffff';
+            break;
+        case 'green':
+            themeBackground = '#ffffff';
+            break;
+        default: // dark
+            themeBackground = '#1a2332';
+    }
+
     // Clone to measure accurate height
     const clone = element.cloneNode(true);
     clone.style.visibility = 'hidden';
@@ -825,7 +845,7 @@ case 'green':
     element.style.transformOrigin = 'top left';
     element.style.width = `${800 / scaleFactor}px`;
     element.style.marginTop = '0'; // ensure it's at the very top
-    element.style.background = '#ffffff';
+    element.style.background = themeBackground; // Use theme background color
     element.style.boxShadow = 'none';
 
     const opt = {
@@ -835,7 +855,8 @@ case 'green':
         html2canvas: {
             scale: 3,
             useCORS: true,
-            scrollY: 0 // prevents vertical shift
+            scrollY: 0, // prevents vertical shift
+            backgroundColor: themeBackground // Force background color in html2canvas
         },
         jsPDF: {
             unit: 'mm',
@@ -852,6 +873,7 @@ case 'green':
             element.style.transformOrigin = originalTransformOrigin;
             element.style.width = originalWidth;
             element.style.marginTop = originalMarginTop;
+            element.style.background = ''; // Reset to original
         });
     }, 400);
 });

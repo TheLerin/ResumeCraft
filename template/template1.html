@@ -562,10 +562,7 @@
                     </div>
                 </div>
                 
-                <div class="instructions">
-                    <i class="fas fa-edit"></i> Click anywhere on the resume to edit content. 
-                    Your resume will automatically fit on one page for PDF export.
-                </div>
+              
             </div>
         </div>
         
@@ -815,8 +812,12 @@
         document.getElementById('download-pdf').addEventListener('click', function () {
             const element = document.getElementById('resume-content');
             
-            // Store original background color
-            const originalBackground = window.getComputedStyle(element).backgroundColor;
+            // Determine current theme background color
+            const activeTheme = document.querySelector('.theme-btn.active');
+            const currentTheme = activeTheme ? activeTheme.getAttribute('data-theme') : '1';
+            
+            // Set background color based on current theme - use the body color for all themes
+            let themeBackground = '#e0d0a7'; // All themes use the same body color
             
             // Clone to measure accurate height
             const clone = element.cloneNode(true);
@@ -846,8 +847,8 @@
             element.style.width = `${800 / scaleFactor}px`;
             element.style.marginTop = '0';
             element.style.boxShadow = 'none';
-            // Keep the original background color
-            element.style.background = originalBackground;
+            // Force the body background color to match the current theme
+            element.style.backgroundColor = themeBackground;
 
             const opt = {
                 margin: 0,
@@ -856,7 +857,8 @@
                 html2canvas: {
                     scale: 3,
                     useCORS: true,
-                    scrollY: 0 // prevents vertical shift
+                    scrollY: 0, // prevents vertical shift
+                    backgroundColor: themeBackground // Force background color in html2canvas
                 },
                 jsPDF: {
                     unit: 'mm',
@@ -874,7 +876,7 @@
                     element.style.width = originalWidth;
                     element.style.marginTop = originalMarginTop;
                     element.style.boxShadow = originalBoxShadow;
-                    element.style.background = ''; // Reset to original
+                    element.style.backgroundColor = ''; // Reset to original
                 });
             }, 400);
         });

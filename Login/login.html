@@ -77,71 +77,126 @@
     </footer>
 <script src="java script/script.js"></script>
     <script>
-        // Set current year in footer
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    // Set current year in footer
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        // Redirect to homepage after login/sign up
-        function goToHome() {
-            window.location.href = "../index.html"; // Change path if homepage is elsewhere
+    // Redirect to homepage after login/sign up
+    function goToHome() {
+        window.location.href = "../index.html"; // Change path if homepage is elsewhere
+    }
+
+    // Validate password and return unmet criteria
+    function getPasswordErrors(password) {
+        const errors = [];
+
+        if (password.length < 8) {
+            errors.push("At least 8 characters");
         }
-        function isValidPassword(password) {
-        // At least 8 characters, one uppercase, one special character
-        const regex = /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{8,}$/;
-        return regex.test(password);
+        if (!/[A-Z]/.test(password)) {
+            errors.push("At least one uppercase letter");
+        }
+        if (!/[^A-Za-z0-9]/.test(password)) {
+            errors.push("At least one special character");
         }
 
-        // Handle login form submit (redirect to homepage)
-        document.getElementById('loginForm').onsubmit = function(ev) {
+        return errors;
+    }
+
+    // Show password errors live while typing
+    const passwordField = document.getElementById('password');
+    const passwordFeedback = document.createElement('div');
+    passwordFeedback.id = 'passwordFeedback';
+    passwordFeedback.style.color = 'red';
+    passwordField.parentNode.appendChild(passwordFeedback);
+
+    passwordField.addEventListener('input', function () {
+        const password = passwordField.value;
+        const errors = getPasswordErrors(password);
+
+        if (errors.length === 0) {
+            passwordFeedback.style.color = '#2a9d8f';
+            passwordFeedback.textContent = "Password is strong ✅";
+        } else {
+            passwordFeedback.style.color = '#e76f51';
+            passwordFeedback.innerHTML = "Missing: <ul>" + errors.map(e => `<li>${e}</li>`).join('') + "</ul>";
+        }
+    });
+
+    // Handle login form submit (redirect to homepage)
+    document.getElementById('loginForm').onsubmit = function (ev) {
+        ev.preventDefault();
+        const password = document.getElementById('password').value;
+        if (getPasswordErrors(password).length === 0) {
+            goToHome();
+        } else {
+            alert("Invalid password. Please ensure it meets the requirements.");
+        }
+    };
+
+    // Handle Google sign in button (redirect to homepage)
+    document.getElementById('googleSignIn').onclick = function (ev) {
+        ev.preventDefault();
+        goToHome();
+    };
+
+    // Sign Up functionality
+    document.getElementById('signupLink').addEventListener('click', function (e) {
+        e.preventDefault();
+        const authCard = document.getElementById('authCard');
+        authCard.innerHTML = `
+            <h2>Create Account</h2>
+            <p>Sign up to start building your professional resume</p>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="••••••••" required>
+                    <div id="signupPasswordFeedback" style="color: red;"></div>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Sign Up</button>
+            </form>
+            <div class="signup-link">
+                <p>Already have an account? <a href="#" id="backToLogin">Sign in</a></p>
+            </div>
+        `;
+
+        // Back to login
+        document.getElementById('backToLogin').onclick = function (ev) {
             ev.preventDefault();
-            const password = document.getElementById('password').value;
-            if (isValidPassword(password)) {
+            window.location.reload();
+        };
+
+        const signupPasswordField = document.getElementById('signupPassword');
+        const signupFeedback = document.getElementById('signupPasswordFeedback');
+
+        signupPasswordField.addEventListener('input', function () {
+            const password = signupPasswordField.value;
+            const errors = getPasswordErrors(password);
+
+            if (errors.length === 0) {
+                signupFeedback.style.color = '#2a9d8f';
+                signupFeedback.textContent = "Password is strong ✅";
+            } else {
+                signupFeedback.style.color = '#e76f51';
+                signupFeedback.innerHTML = "Missing: <ul>" + errors.map(e => `<li>${e}</li>`).join('') + "</ul>";
+            }
+        });
+
+        // Handle sign up form submit
+        document.getElementById('signupForm').onsubmit = function (ev) {
+            ev.preventDefault();
+            const password = signupPasswordField.value;
+            if (getPasswordErrors(password).length === 0) {
                 goToHome();
             } else {
                 alert("Invalid password. Please ensure it meets the requirements.");
             }
         };
+    });
+</script>
 
-        // Handle Google sign in button (redirect to homepage)
-        document.getElementById('googleSignIn').onclick = function(ev) {
-            ev.preventDefault();
-            goToHome();
-        };
-
-        // Sign Up functionality (no backend, just redirect after sign up)
-        document.getElementById('signupLink').addEventListener('click', function(e) {
-            e.preventDefault();
-            const authCard = document.getElementById('authCard');
-            authCard.innerHTML = `
-                <h2>Create Account</h2>
-                <p>Sign up to start building your professional resume</p>
-                <form id="signupForm">
-                    <div class="form-group">
-                        <label for="signupEmail">Email Address</label>
-                        <input type="email" id="signupEmail" placeholder="you@example.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signupPassword">Password</label>
-                        <input type="password" id="signupPassword" placeholder="••••••••" required>
-                    </div>
-                    <button type="submit" class="btn" style="width: 100%;">Sign Up</button>
-                </form>
-                <div class="signup-link">
-                    <p>Already have an account? <a href="#" id="backToLogin">Sign in</a></p>
-                </div>
-            `;
-
-            // Back to login
-            document.getElementById('backToLogin').onclick = function(ev) {
-                ev.preventDefault();
-                window.location.reload();
-            };
-
-            // Handle sign up form submit (redirect to homepage)
-            document.getElementById('signupForm').onsubmit = function(ev) {
-                ev.preventDefault();
-                goToHome();
-            };
-        });
-    </script>
 </body>
 </html>
